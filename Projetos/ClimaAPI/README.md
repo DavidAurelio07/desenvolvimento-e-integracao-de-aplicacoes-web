@@ -58,11 +58,11 @@ src/
     └── java/
         └── com/example/ClimaAPI/
             ├── controller/
-            │   └── ClimaController.java   # Expoe o endpoint /clima
+            │   └── Controller.java   
             ├── dto/
-            │   └── ClimaResponseDTO.java  # Estrutura padronizada de resposta
+            │   └── ResponseDTO.java  
             └── service/
-                └── ClimaService.java      # Lógica de consumo da API externa
+                └── ClimaService.java     
 
 ```
 ### ▶️ Como Executar o Projeto Localmente
