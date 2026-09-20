@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <script th:src="@{/js/stars.js}" defer></script>
+</head>
+
+<body>
+<div class="login-container">
+    <div class="login-image-logo-container">
+        <img th:src="@{/images/logoPUC.jpg}" alt="Logo PUC Minas">
+    </div>
+    <div class="login-form">
+        <form th:action="@{/login}" method="post" class="login-form">
+            <h4 class="login-title">Realize seu login</h4>
+            <p class="login-error" th:if="${param.error}" style="color: red; font-weight: bold;">Usuário ou senha incorretos.</p>
+            <input type="text" id="username" name="username" placeholder="Usuário" required>
+            <input type="password" id="password" name="password" placeholder="Senha" required>
+            <div class="login-button-container">
+                <button type="submit">Entrar</button>
+            </div>
+
+            <a class="forgot-link" th:href="@{/recoverpassword}">Esqueceu a senha?</a>
+
+            <a class="login-create" th:href="@{/register}">Criar conta</a>
+        </form>
+    </div>
+</div>
+</body>
+
+</html>
