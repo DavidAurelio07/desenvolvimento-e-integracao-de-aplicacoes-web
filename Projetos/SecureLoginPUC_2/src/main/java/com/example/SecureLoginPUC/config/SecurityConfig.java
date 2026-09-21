@@ -8,11 +8,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
@@ -33,7 +32,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/register").permitAll() // Permitir envio do formulário de registro
                         .requestMatchers(HttpMethod.GET, "/recoverpassword").permitAll() // Permitir acesso à página de recuperação de senha
                         .requestMatchers(HttpMethod.POST, "/recoverpassword").permitAll() // Permitir acesso à página de recuperação de senha
-                        .requestMatchers(HttpMethod.GET, "/error").permitAll() // Permitir acesso à página de erro
+                        .requestMatchers(HttpMethod.GET, "/resetpassword").permitAll() // Permitir acesso à página de nova senha (via link do e-mail)
+                        .requestMatchers(HttpMethod.POST, "/resetpassword").permitAll() // Permitir envio do formulário de nova senha
+                        .requestMatchers("/error").permitAll() // Permitir a página de erro em QUALQUER método: o container repassa o erro com o método da requisição original (ex.: POST)
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Proteger URLs que começam com /admin para apenas ADMIN
                         .requestMatchers(HttpMethod.GET, "/js/**").permitAll()
                         .anyRequest().authenticated() // Proteger todas as outras URLs

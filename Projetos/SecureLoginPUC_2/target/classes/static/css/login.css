@@ -163,3 +163,13 @@ body, html {
     text-decoration: none;
 }
 .login-redirect-options a:hover { text-decoration: underline; }
+
+.login-message {
+    width: 100%;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+}
+.login-message-success { color: #7FD1A0; }
+.login-message-error { color: #FF6B6B; }

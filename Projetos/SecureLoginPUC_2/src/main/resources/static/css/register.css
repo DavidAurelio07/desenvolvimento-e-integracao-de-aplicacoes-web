@@ -120,3 +120,17 @@ body, html {
     color: #E6EEF3;
     margin-left: 5px;
 }
+
+.register-errors {
+    width: 100%;
+    list-style: none;
+    margin-bottom: 0.5rem;
+    color: #FF6B6B;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: left;
+}
+
+.register-errors li + li {
+    margin-top: 0.25rem;
+}
