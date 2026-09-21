@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>SecureLoginPUC</artifactId>
+	<artifactId>LoginPUC</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>SecureLoginPUC_2</name>
 	<description>SecureLoginPUC_2 for Spring Boot</description>
