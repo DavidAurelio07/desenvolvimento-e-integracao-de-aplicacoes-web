@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.SecureLoginPUC.service.SendEmailService;
+
 @Controller
 public class SecureLoginController {
 
@@ -51,6 +53,14 @@ public class SecureLoginController {
         return "redirect:/login"; // Após o registro, redirecionar para a página de login
     }
 
+
+        private final SendEmailService sendEmailService;
+
+            public SecureLoginController(SendEmailService sendEmailService) {
+                this.sendEmailService = sendEmailService;
+            }
+
+
     @GetMapping("/recoverpassword")
     public String recoverpassword() {
         return "recoverpassword";
@@ -60,8 +70,12 @@ public class SecureLoginController {
     public String handleRecoverPassword(
             @RequestParam("email") String email) {
 
-        // Aqui você pode adicionar lógica para recuperar a senha.
-        // userService.recoverPassword(email);
+        sendEmailService.sendEmail(
+            email,
+            "Recuperação de senha",
+            "<h1>Recuperação de senha</h1>" +
+            "<p>Você solicitou uma recuperação de senha.</p>"
+        );
 
         // Redirecionar ou exibir uma mensagem de sucesso
         System.out.println("Recuperação de E-mail: Redirecionado para a página de login.");

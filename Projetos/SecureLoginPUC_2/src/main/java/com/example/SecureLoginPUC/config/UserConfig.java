@@ -9,6 +9,9 @@ public class UserConfig {
     @Value("${app.user.username}")
     private String userUsername;
 
+    @Value("${app.user.name}")
+    private String userName;
+
     @Value("${app.user.password}")
     private String userPassword;
 
@@ -18,8 +21,16 @@ public class UserConfig {
     @Value("${app.admin.password}")
     private String adminPassword;
 
+    @Value("${app.admin.name}")
+    private String adminName;
+    
+
     public String getUserUsername() {
         return userUsername;
+    }
+
+    public String getUserName(){
+        return userName;
     }
 
     public String getUserPassword() {
@@ -28,6 +39,10 @@ public class UserConfig {
 
     public String getAdminUsername() {
         return adminUsername;
+    }
+
+    public String getAdminName(){
+        return adminName;
     }
 
     public String getAdminPassword() {
