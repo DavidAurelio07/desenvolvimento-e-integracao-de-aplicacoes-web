@@ -20,7 +20,7 @@
             <p class="login-message login-message-success" th:if="${param.registered}">Conta criada com sucesso. Faça login para continuar.</p>
             <p class="login-message login-message-success" th:if="${param.reset}">Senha alterada com sucesso. Entre com a nova senha.</p>
             <p class="login-error" th:if="${param.error}" style="color: red; font-weight: bold;">Usuário ou senha incorretos.</p>
-            <input type="text" id="username" name="username" placeholder="Usuário" required>
+            <input type="text" id="username" name="username" placeholder="Email" required>
             <input type="password" id="password" name="password" placeholder="Senha" required>
             <div class="login-button-container">
                 <button type="submit">Entrar</button>

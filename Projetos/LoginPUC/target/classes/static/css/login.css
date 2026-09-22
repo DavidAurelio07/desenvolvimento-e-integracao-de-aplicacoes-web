@@ -48,12 +48,65 @@ body, html {
     display: block;
 }
 
+
+.login-recover-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 30vw;
+    height: 40vw;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: rgb(22 34 45 / 0.5);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    border: 1px solid #2B3E4F;
+    position: relative;
+    z-index: 1;
+}
+
+.login-recover-image-logo-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.login-recover-image-logo-container img{
+    max-width: 300px;
+    height: auto;
+    display: block;
+
+    animation:  logo-girar 10s linear infinite;
+}
+
+.login-message-recover{
+    color:#E6EEF3;
+    font-size: 25px;
+    text-align: center;
+    font-weight: bolder;
+    margin-bottom: 1rem;
+}
+
+@keyframes logo-girar {
+    from{
+        transform:rotateY(0deg);
+    }
+
+    to{
+        transform:rotateY(360deg);
+    }
+}
+
 .login-form {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 80%;
+    width: 100%;
     padding: 2rem;
     border-radius: 0 10px 10px 0;
 }
