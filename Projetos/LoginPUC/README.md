@@ -6,45 +6,65 @@ O SecureLoginPUC é um projeto de aplicação web que implementa um sistema de l
 ## Estrutura do Projeto
 
 ```
-SecureLoginPUC
+LoginPUC
 │
 ├── src
-│   └── main
-│       ├── java
-│       │   └── com.example.SecureLoginPUC
-│       │       ├── application
-│       │       │   └── SecureLoginPUCApplication.java
-│       │       ├── config
-│       │       │   ├── SecurityConfig.java
-│       │       │   └── UserConfig.java
-│       │       └── controller
-│       │           └── SecureLoginPUCController.java
-│       └── resources
-│           ├── application.properties
-│           ├── static
-│           │   ├── css
-│           │   │   ├── login.css
-│           │   │   ├── register.css
-│           │   │   └── style.css
-│           │   └── images
-│           │       ├── apc-login-bg.png
-│           │       └── logo-puc-minas.jpg
-│           └── templates
-│               ├── admin.html
-│               ├── error.html
-│               ├── home.html
-│               ├── login.html
-│               ├── recoverpassword.html
-│               └── register.html
+│   ├── main
+│   │   ├── java
+│   │   │   └── com.example.SecureLoginPUC
+│   │   │       ├── application
+│   │   │       │   └── SecureLoginPUCApplication.java
+│   │   │       ├── config
+│   │   │       │   ├── SecurityConfig.java
+│   │   │       │   └── UserConfig.java
+│   │   │       ├── controller
+│   │   │       │   └── SecureLoginController.java
+│   │   │       ├── exception
+│   │   │       │   └── SendEmailException.java
+│   │   │       ├── service
+│   │   │       │   ├── PasswordResetService.java
+│   │   │       │   ├── SendEmailService.java
+│   │   │       │   └── UserService.java
+│   │   │       └── validation
+│   │   │           └── PasswordPolicy.java
+│   │   │
+│   │   └── resources
+│   │       ├── application.properties
+│   │       ├── static
+│   │       │   ├── css
+│   │       │   │   ├── login.css
+│   │       │   │   ├── register.css
+│   │       │   │   └── style.css
+│   │       │   ├── images
+│   │       │   │   ├── apc-login-bg.png
+│   │       │   │   ├── apc-login-bg-2.png
+│   │       │   │   ├── campus-fotoPUC.jpg
+│   │       │   │   └── logoPUC.jpg
+│   │       │   └── js
+│   │       │       └── stars.js
+│   │       └── templates
+│   │           ├── admin.html
+│   │           ├── error.html
+│   │           ├── home.html
+│   │           ├── login.html
+│   │           ├── recoverpassword.html
+│   │           ├── register.html
+│   │           └── resetpassword.html
+│   │
+│   └── test
+│       └── java
+│           └── com.example.SecureLoginPUC
+│               └── SecureLoginPUCApplicationTests.java             └── register.html
 
 ```
 
 ## Configuração do application.properties
+Usuário e senha para que possa acessar o login:
 
 ```properties
 spring.application.name=SecureLoginPUC
-app.user.username=joao
-app.user.password=4321
+app.user.username=davidteste@gmail.com
+app.user.password=7700
 app.admin.username=admin
 app.admin.password=1234
 ```
@@ -68,6 +88,12 @@ app.admin.password=1234
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
+
+        <!-- Dependência do Spring Mail para o envio de email -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-mail</artifactId>
 </dependency>
 ```
 
@@ -104,40 +130,32 @@ Neste exemplo, o título e a lista de itens são preenchidos dinamicamente com d
 
 Thymeleaf é uma escolha poderosa para desenvolvedores que desejam criar interfaces web dinâmicas e interativas em aplicações Java. Com sua sintaxe intuitiva e forte integração com o Spring, ele se tornou uma ferramenta popular no ecossistema de desenvolvimento Java.
 
-## Interface Gráfica
+# Interface Gráfica
 
 A interface gráfica permite ao usuário inserir seus dados de login e, após a autenticação, ser redirecionado para a página correspondente, onde terá acesso às funcionalidades e informações de acordo com suas credenciais.
 
 ### Captura de Tela
 
-- **Login**: A página de login possui campos para inserir o nome de usuário e a senha. Ela  também exibe o logo da PUC Minas, proporcionando uma identificação visual clara da instituição. Abaixo do formulário de login, existem links para os usuários que ainda não possuem cadastro, direcionando-os para a página de registro, e para aqueles que esqueceram a senha, levando-os à página de recuperação de senha.
+- **Login**: A página de login possui campos para inserir o e-mail (ou usuário) e a senha. Ela também exibe o logo da PUC Minas, proporcionando uma identificação visual clara da instituição. Abaixo do formulário de login, existem links para os usuários que ainda não possuem cadastro, direcionando-os para a página de registro, e para aqueles que esqueceram a senha, levando-os à página de recuperação de senha.
 
-- **Register**: A página de registro permite que novos usuários criem uma conta na plataforma. Ela inclui campos para inserir **nome completo, e-mail, CPF, RG, endereço, instituição e senha**, garantindo que todas as informações necessárias para cadastro sejam coletadas. A lateral exibe o **logo da PUC Minas**, mantendo a identidade visual da instituição. Abaixo do formulário, há um link para os usuários que já possuem conta, direcionando-os de volta para a página de login.
+- **Register**: A página de registro permite que novos usuários criem uma conta na plataforma. Ela inclui campos para inserir **nome completo, e-mail, CPF, RG, endereço, instituição, senha e confirmação de senha**, além de validar os dados informados (campos obrigatórios, formato do e-mail, senhas coincidentes, e-mail já cadastrado e requisitos mínimos de senha), garantindo que todas as informações necessárias para cadastro sejam coletadas corretamente. A lateral exibe o **logo da PUC Minas**, mantendo a identidade visual da instituição. Abaixo do formulário, há um link para os usuários que já possuem conta, direcionando-os de volta para a página de login.
 
-| <img src="https://joaopauloaramuni.github.io/java-imgs/SecureLoginPUC_2/imgs/Login.png" alt="Login" width="1000"/> |
-|:----------------------------------------------------:|
-|                        Login                         |
+- **Recuperação de senha**: Ao clicar em "Esqueceu a senha?" na tela de login, o usuário é levado à página de recuperação, onde informa seu e-mail cadastrado. Se o e-mail existir, um link de redefinição — válido por 30 minutos e de uso único — é enviado para a caixa de entrada. Ao acessá-lo, o usuário define uma nova senha e é redirecionado para o login.
 
-| <img src="https://joaopauloaramuni.github.io/java-imgs/SecureLoginPUC_2/imgs/Register.png" alt="Register" width="1000"/> |
-|:-------------------------------------------------------:|
-|                        Register                         |
 
-## Métodos da Classe SecurityConfig
+| <img src="./../Imagens-ReadME/tela-loginPUC.png" alt="Login" width="1000"/> |
+|:---------------------------------------------------------------------------:|
+|                               Página de Login                               |
 
-### @Configuration
-Indica que a classe contém métodos de configuração que geram beans para o contexto da aplicação.
+| <img src="./../Imagens-ReadME/tela-registroPUC.png" alt="Register" width="1000"/> |
+|:---------------------------------------------------------------------------------:|
+|                                Página de Registro                                 |
 
-### @EnableWebSecurity
-Ativa a segurança da web, permitindo a configuração de regras de segurança para as URLs da aplicação.
+| <img src="./../Imagens-ReadME/tela-recuperacaoPUC.png" alt="Register" width="1000"/> |
+|:------------------------------------------------------------------------------------:|
+|                            Página de Recuperação de Senha                            |
 
-### public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
-Configura as regras de segurança das requisições HTTP, permitindo o acesso público às páginas de login e arquivos CSS, restringindo o acesso às páginas do administrador.
 
-### public UserDetailsService userDetailsService()
-Configura o gerenciamento de usuários em memória, criando um usuário comum e um administrador, codificando as senhas.
-
-### public PasswordEncoder passwordEncoder()
-Define o codificador de senhas a ser utilizado na aplicação, utilizando o BCryptPasswordEncoder.
 
 ## Urls do projeto:
 http://localhost:8080/login
@@ -153,6 +171,3 @@ http://localhost:8080/error
 http://localhost:8080/register
 
 http://localhost:8080/recoverpassword
-
-## Licença
-Este projeto está licenciado sob a MIT License.
