@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { cadastrarCliente } from '../services/clienteService'
-
-const MAX_RENDIMENTOS = 3
+import { mensagemDeErro } from '../services/api'
+import RendimentosEditor from '../components/RendimentosEditor'
 
 const formInicial = {
   login: '',
@@ -25,22 +25,6 @@ export default function Cadastro() {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  function adicionarRendimento() {
-    if (rendimentos.length < MAX_RENDIMENTOS) {
-      setRendimentos([...rendimentos, { entidadeEmpregadora: '', valor: '' }])
-    }
-  }
-
-  function atualizarRendimento(indice, campo, valor) {
-    setRendimentos(
-      rendimentos.map((r, i) => (i === indice ? { ...r, [campo]: valor } : r)),
-    )
-  }
-
-  function removerRendimento(indice) {
-    setRendimentos(rendimentos.filter((_, i) => i !== indice))
-  }
-
   async function enviar(e) {
     e.preventDefault()
     setErro('')
@@ -55,7 +39,7 @@ export default function Cadastro() {
       })
       navigate('/login')
     } catch (err) {
-      setErro(err.response?.data?.message ?? 'Não foi possível concluir o cadastro.')
+      setErro(mensagemDeErro(err, 'Não foi possível concluir o cadastro.'))
     } finally {
       setCarregando(false)
     }
@@ -71,8 +55,8 @@ export default function Cadastro() {
           <input name="login" value={form.login} onChange={atualizar} required />
         </label>
         <label>
-          Senha
-          <input type="password" name="senha" value={form.senha} onChange={atualizar} required />
+          Senha (mínimo 6 caracteres)
+          <input type="password" name="senha" value={form.senha} onChange={atualizar} minLength={6} required />
         </label>
         <label>
           Nome
@@ -95,38 +79,7 @@ export default function Cadastro() {
           <input name="profissao" value={form.profissao} onChange={atualizar} required />
         </label>
 
-        <fieldset>
-          <legend>Rendimentos (máximo {MAX_RENDIMENTOS})</legend>
-          {rendimentos.map((r, i) => (
-            <div key={i}>
-              <input
-                placeholder="Entidade empregadora"
-                value={r.entidadeEmpregadora}
-                onChange={(e) => atualizarRendimento(i, 'entidadeEmpregadora', e.target.value)}
-                required
-              />
-              <input
-                type="number"
-                min="0"
-                step="0.01"
-                placeholder="Rendimento (R$)"
-                value={r.valor}
-                onChange={(e) => atualizarRendimento(i, 'valor', e.target.value)}
-                required
-              />
-              <button type="button" onClick={() => removerRendimento(i)}>
-                Remover
-              </button>
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={adicionarRendimento}
-            disabled={rendimentos.length >= MAX_RENDIMENTOS}
-          >
-            Adicionar rendimento
-          </button>
-        </fieldset>
+        <RendimentosEditor rendimentos={rendimentos} onChange={setRendimentos} />
 
         {erro && <p role="alert">{erro}</p>}
         <button type="submit" disabled={carregando}>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/useAuth'
+import { mensagemDeErro } from '../services/api'
 
 export default function Login() {
   const { login } = useAuth()
@@ -21,7 +22,7 @@ export default function Login() {
       await login(credenciais)
       navigate('/')
     } catch (err) {
-      setErro(err.response?.data?.message ?? 'Usuário ou senha inválidos.')
+      setErro(mensagemDeErro(err, 'Usuário ou senha inválidos.'))
     } finally {
       setCarregando(false)
     }
@@ -38,13 +39,7 @@ export default function Login() {
         </label>
         <label>
           Senha
-          <input
-            type="password"
-            name="senha"
-            value={credenciais.senha}
-            onChange={atualizar}
-            required
-          />
+          <input type="password" name="senha" value={credenciais.senha} onChange={atualizar} required />
         </label>
         {erro && <p role="alert">{erro}</p>}
         <button type="submit" disabled={carregando}>
