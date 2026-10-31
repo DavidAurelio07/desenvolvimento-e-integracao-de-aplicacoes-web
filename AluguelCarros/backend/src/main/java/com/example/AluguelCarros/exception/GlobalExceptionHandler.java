@@ -2,6 +2,7 @@ package com.example.AluguelCarros.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -12,6 +13,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CredenciaisInvalidasException.class)
     public ResponseEntity<ErroResponse> credenciaisInvalidas(CredenciaisInvalidasException ex) {
         return resposta(HttpStatus.UNAUTHORIZED, ex.getMessage());
+    }
+
+    @ExceptionHandler(RecursoNaoEncontradoException.class)
+    public ResponseEntity<ErroResponse> naoEncontrado(RecursoNaoEncontradoException ex) {
+        return resposta(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
     @ExceptionHandler(ConflitoException.class)
@@ -31,6 +37,11 @@ public class GlobalExceptionHandler {
                 .map(erro -> erro.getDefaultMessage())
                 .orElse("Dados inválidos.");
         return resposta(HttpStatus.BAD_REQUEST, mensagem);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErroResponse> corpoInvalido(HttpMessageNotReadableException ex) {
+        return resposta(HttpStatus.BAD_REQUEST, "Requisição inválida. Confira os dados enviados.");
     }
 
     private ResponseEntity<ErroResponse> resposta(HttpStatus status, String mensagem) {

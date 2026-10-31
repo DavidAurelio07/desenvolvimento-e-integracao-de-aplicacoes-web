@@ -33,6 +33,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login", "/clientes").permitAll()
+                        .requestMatchers("/clientes/me").hasRole("CLIENTE")
+                        .requestMatchers(HttpMethod.POST, "/automoveis").hasRole("AGENTE")
+                        .requestMatchers(HttpMethod.POST, "/pedidos").hasRole("CLIENTE")
+                        .requestMatchers(HttpMethod.PATCH, "/pedidos/*/cancelar").hasRole("CLIENTE")
+                        .requestMatchers(HttpMethod.POST, "/pedidos/*/avaliacoes").hasRole("AGENTE")
                         .anyRequest().authenticated())
                 .exceptionHandling(e -> e
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
