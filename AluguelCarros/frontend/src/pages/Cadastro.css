@@ -1,0 +1,30 @@
+.cadastro-form { display: grid; gap: 1.75rem; }
+
+.cadastro-bloco { display: grid; gap: 1rem; }
+.cadastro-bloco-titulo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  padding-bottom: 0.6rem;
+  border-bottom: 2px solid var(--ouro);
+  font-size: 1.05rem;
+}
+.cadastro-numero {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--verde);
+  color: var(--ouro);
+  font-family: var(--fonte-corpo);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.cadastro-form button[type='submit'] { padding: 0.8rem 1.2rem; font-size: 1rem; }
+.cadastro-rodape {
+  margin: 1.5rem 0 0;
+  text-align: center;
+  color: var(--texto-suave);
+}

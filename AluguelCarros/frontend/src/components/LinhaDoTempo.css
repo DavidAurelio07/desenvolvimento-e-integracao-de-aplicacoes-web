@@ -1,0 +1,66 @@
+.tempo {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tempo li {
+  position: relative;
+  flex: 1;
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  text-align: center;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--texto-suave);
+}
+.tempo li:not(:first-child)::before {
+  content: '';
+  position: absolute;
+  top: 19px;
+  left: -50%;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--borda);
+}
+.tempo-bolinha {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 3px solid var(--borda);
+  background: var(--branco);
+  font-weight: 700;
+  color: var(--texto-suave);
+}
+
+.tempo-feito { color: var(--verde); }
+.tempo-feito::before, .tempo-atual::before { background: var(--verde) !important; }
+.tempo-feito .tempo-bolinha { background: var(--verde); border-color: var(--verde); color: var(--ouro); }
+
+.tempo-atual { color: var(--texto); }
+.tempo-atual .tempo-bolinha {
+  border-color: var(--ouro);
+  background: var(--ouro-claro);
+  color: #7a5200;
+  box-shadow: 0 0 0 5px rgba(244, 185, 66, 0.3);
+}
+
+.tempo-erro { color: var(--perigo); }
+.tempo-erro::before { background: var(--perigo) !important; }
+.tempo-erro .tempo-bolinha { background: var(--perigo); border-color: var(--perigo); color: var(--branco); }
+
+.tempo-cancelado { color: var(--texto-suave); }
+.tempo-cancelado::before { background: #b9b5a6 !important; }
+.tempo-cancelado .tempo-bolinha { background: #b9b5a6; border-color: #b9b5a6; color: var(--branco); }
+
+@media (max-width: 560px) {
+  .tempo li { font-size: 0.75rem; }
+  .tempo-bolinha { width: 34px; height: 34px; }
+  .tempo li:not(:first-child)::before { top: 15px; }
+}

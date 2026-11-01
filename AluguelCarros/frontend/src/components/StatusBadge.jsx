@@ -1,3 +1,5 @@
+import './StatusBadge.css'
+
 const ROTULOS = {
   EM_ANALISE: 'Em análise',
   APROVADO: 'Aprovado',
@@ -7,5 +9,9 @@ const ROTULOS = {
 }
 
 export default function StatusBadge({ status }) {
-  return <strong>{ROTULOS[status] ?? status}</strong>
+  return (
+    <strong className={`status status-${status.toLowerCase()}`}>
+      {ROTULOS[status] ?? status}
+    </strong>
+  )
 }

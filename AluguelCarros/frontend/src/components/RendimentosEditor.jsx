@@ -1,3 +1,5 @@
+import './RendimentosEditor.css'
+
 export default function RendimentosEditor({ rendimentos, onChange, maximo = 3 }) {
   function adicionar() {
     if (rendimentos.length < maximo) {
@@ -14,12 +16,18 @@ export default function RendimentosEditor({ rendimentos, onChange, maximo = 3 })
   }
 
   return (
-    <fieldset>
-      <legend>Rendimentos (máximo {maximo})</legend>
+    <div className="rendimentos">
+      {rendimentos.length === 0 && (
+        <p className="rendimentos-vazio">
+          Nenhum rendimento informado. Você pode adicionar até {maximo}.
+        </p>
+      )}
+
       {rendimentos.map((r, i) => (
-        <div key={i}>
+        <div key={i} className="rendimento-linha">
           <input
             placeholder="Entidade empregadora"
+            aria-label="Entidade empregadora"
             value={r.entidadeEmpregadora}
             onChange={(e) => atualizar(i, 'entidadeEmpregadora', e.target.value)}
             required
@@ -29,16 +37,28 @@ export default function RendimentosEditor({ rendimentos, onChange, maximo = 3 })
             min="0"
             step="0.01"
             placeholder="Rendimento (R$)"
+            aria-label="Rendimento em reais"
             value={r.valor}
             onChange={(e) => atualizar(i, 'valor', e.target.value)}
             required
           />
-          <button type="button" onClick={() => remover(i)}>Remover</button>
+          <button type="button" className="btn-secundario" onClick={() => remover(i)}>
+            Remover
+          </button>
         </div>
       ))}
-      <button type="button" onClick={adicionar} disabled={rendimentos.length >= maximo}>
-        Adicionar rendimento
-      </button>
-    </fieldset>
+
+      <div className="rendimentos-rodape">
+        <span className="rendimentos-contador">{rendimentos.length} de {maximo} rendimentos</span>
+        <button
+          type="button"
+          className="btn-secundario"
+          onClick={adicionar}
+          disabled={rendimentos.length >= maximo}
+        >
+          Adicionar rendimento
+        </button>
+      </div>
+    </div>
   )
 }

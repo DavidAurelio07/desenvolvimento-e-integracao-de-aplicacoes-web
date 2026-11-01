@@ -1,0 +1,82 @@
+.novo-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 1.5rem;
+  align-items: start;
+}
+.novo-principal { display: grid; gap: 1.5rem; }
+
+.novo-titulo {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+.novo-passo {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--verde);
+  color: var(--ouro);
+  font-family: var(--fonte-corpo);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.novo-carros {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 1rem;
+}
+
+/* ----- Resumo ----- */
+.novo-resumo {
+  position: sticky;
+  top: 6.5rem;
+  display: grid;
+  gap: 1rem;
+  border-top: 5px solid var(--ouro);
+}
+.novo-resumo h2 { margin: 0; }
+.novo-resumo-carro {
+  padding: 0.75rem 1rem 0.4rem;
+  border-radius: 10px;
+  background: var(--creme);
+  color: var(--verde);
+}
+.novo-resumo-carro svg { display: block; width: 100%; height: auto; }
+.novo-resumo-vazio {
+  margin: 0;
+  padding: 1rem;
+  border: 1px dashed #cfc8b3;
+  border-radius: 10px;
+  color: var(--texto-suave);
+  text-align: center;
+  font-size: 0.92rem;
+}
+.novo-resumo-lista { display: grid; gap: 0.6rem; margin: 0; }
+.novo-resumo-lista div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--borda);
+}
+.novo-resumo-lista dt { color: var(--texto-suave); }
+.novo-resumo-lista dd { margin: 0; font-weight: 700; text-align: right; }
+.novo-resumo-dias {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+  background: var(--ouro-claro);
+  color: #5d4000;
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .novo-grid { grid-template-columns: 1fr; }
+  .novo-resumo { position: static; }
+}

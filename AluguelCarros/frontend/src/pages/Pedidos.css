@@ -1,0 +1,46 @@
+.pedidos-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+.pedidos-filtro {
+  padding: 0.4rem 1rem;
+  border: 2px solid var(--borda);
+  border-radius: 999px;
+  background: var(--branco);
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+}
+.pedidos-filtro:hover:not(:disabled) {
+  background: var(--creme-escuro);
+  border-color: var(--borda);
+  color: var(--texto);
+}
+.pedidos-filtro-ativo,
+.pedidos-filtro-ativo:hover:not(:disabled) {
+  background: var(--verde);
+  border-color: var(--verde);
+  color: var(--creme);
+}
+.pedidos-filtro small { margin-left: 0.35rem; opacity: 0.75; font-weight: 700; }
+
+.pedidos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 1.25rem;
+}
+
+.pedidos-vazio {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  background: var(--branco);
+  border: 2px dashed var(--borda);
+  border-radius: var(--raio);
+}
+.pedidos-vazio svg { width: 200px; color: var(--verde); }
+.pedidos-vazio h2 { margin: 0.5rem 0 0; }
+.pedidos-vazio p { color: var(--texto-suave); max-width: 36ch; }

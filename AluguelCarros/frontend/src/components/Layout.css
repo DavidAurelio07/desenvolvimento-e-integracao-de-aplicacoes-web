@@ -1,0 +1,170 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.layout-main {
+  flex: 1;
+}
+
+/* ----- Cabeçalho ----- */
+.topo {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--verde);
+  color: var(--creme);
+  border-bottom: 4px solid var(--ouro);
+  box-shadow: 0 4px 18px rgba(18, 61, 43, 0.28);
+}
+.topo-conteudo {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0.7rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.topo-nav {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+.topo-nav a {
+  color: var(--creme);
+  text-decoration: none;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: background 0.15s;
+}
+.topo-nav a:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+.topo-nav a.active {
+  background: var(--ouro);
+  color: var(--texto);
+  font-weight: 700;
+}
+
+.topo-usuario {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.topo-avatar {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--ouro);
+  color: var(--verde);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.topo-dados {
+  display: grid;
+  line-height: 1.2;
+}
+.topo-dados strong {
+  font-size: 0.92rem;
+}
+.topo-dados small {
+  color: var(--ouro-claro);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.topo-sair {
+  padding: 0.35rem 0.9rem;
+  background: transparent;
+  border-color: rgba(248, 245, 236, 0.6);
+  color: var(--creme);
+  font-size: 0.9rem;
+}
+.topo-sair:hover:not(:disabled) {
+  background: var(--ouro);
+  border-color: var(--ouro);
+  color: var(--texto);
+}
+
+/* ----- Rodapé ----- */
+.rodape {
+  background: var(--verde);
+  color: #dbe6df;
+  border-top: 4px solid var(--ouro);
+  display: flex;
+  flex-direction: column;
+}
+.rodape-conteudo {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 2.25rem 1.25rem 1.5rem;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr;
+  gap: 2rem;
+}
+.rodape-marca p {
+  margin: 0.75rem 0 0;
+  max-width: 34ch;
+  font-size: 0.92rem;
+}
+.rodape h4 {
+  color: var(--ouro);
+  font-family: var(--fonte-corpo);
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+.rodape ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+.rodape a:not(.marca) {
+  color: #dbe6df;
+  font-weight: 400;
+  text-decoration: none;
+}
+.rodape a:not(.marca):hover {
+  color: var(--ouro);
+}
+.rodape-base {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.82rem;
+  color: #a9bdb2;
+}
+
+@media (max-width: 760px) {
+  .topo-conteudo {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .topo-nav {
+    order: 3;
+    flex-basis: 100%;
+  }
+  .topo-usuario {
+    margin-left: auto;
+  }
+  .topo-dados {
+    display: none;
+  }
+  .rodape-conteudo {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .rodape-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}

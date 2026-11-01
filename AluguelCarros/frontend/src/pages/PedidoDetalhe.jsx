@@ -9,12 +9,12 @@ import {
   cancelarPedido,
 } from '../services/pedidoService'
 import { mensagemDeErro } from '../services/api'
+import { diasEntre, formatarData } from '../utils/formatadores'
+import CarroIlustracao from '../components/CarroIlustracao'
+import Icone from '../components/Icone'
+import LinhaDoTempo from '../components/LinhaDoTempo'
 import StatusBadge from '../components/StatusBadge'
-
-function formatarData(iso) {
-  const [ano, mes, dia] = iso.split('-')
-  return `${dia}/${mes}/${ano}`
-}
+import './PedidoDetalhe.css'
 
 export default function PedidoDetalhe() {
   const { id } = useParams()
@@ -87,104 +87,160 @@ export default function PedidoDetalhe() {
   }
 
   if (!pedido) {
-    return erro ? <p role="alert">{erro}</p> : <p>Carregando...</p>
+    return (
+      <div className="pagina">
+        {erro ? <p role="alert">{erro}</p> : <p>Carregando...</p>}
+      </div>
+    )
   }
 
+  const { automovel } = pedido
   const emAnalise = pedido.status === 'EM_ANALISE'
   const podeCancelar = !ehAgente && ['EM_ANALISE', 'APROVADO'].includes(pedido.status)
+  const dias = diasEntre(pedido.dataInicio, pedido.dataFim)
 
   return (
-    <section>
-      <p><Link to="/pedidos">&larr; Voltar aos pedidos</Link></p>
-      <h1>Pedido nº {pedido.id}</h1>
+    <div className="pagina">
+      <Link to="/pedidos" className="detalhe-voltar">
+        <Icone nome="seta" tamanho={16} /> Voltar aos pedidos
+      </Link>
 
-      <p>Status: <StatusBadge status={pedido.status} /></p>
-      {pedido.justificativaParecer && <p>Justificativa do parecer: {pedido.justificativaParecer}</p>}
-      {ehAgente && <p>Cliente: {pedido.clienteNome}</p>}
-      <p>Pedido feito em: {formatarData(pedido.dataPedido)}</p>
+      <header className="detalhe-cabecalho">
+        <div>
+          <p className="detalhe-etiqueta">Pedido de aluguel</p>
+          <h1>Pedido nº {pedido.id}</h1>
+        </div>
+        <StatusBadge status={pedido.status} />
+      </header>
 
-      {edicao ? (
-        <form onSubmit={salvarEdicao}>
-          <label>
-            Automóvel
-            <select
-              value={edicao.automovelId}
-              onChange={(e) => setEdicao({ ...edicao, automovelId: e.target.value })}
-              required
-            >
-              {automoveis.map((a) => (
-                <option key={a.id} value={a.id}>
-                  {a.marca} {a.modelo} {a.ano} - {a.placa}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            Data de retirada
-            <input
-              type="date"
-              value={edicao.dataInicio}
-              onChange={(e) => setEdicao({ ...edicao, dataInicio: e.target.value })}
-              required
-            />
-          </label>
-          <label>
-            Data de devolução
-            <input
-              type="date"
-              min={edicao.dataInicio}
-              value={edicao.dataFim}
-              onChange={(e) => setEdicao({ ...edicao, dataFim: e.target.value })}
-              required
-            />
-          </label>
-          <button type="submit">Salvar</button>
-          <button type="button" onClick={() => setEdicao(null)}>Descartar</button>
-        </form>
-      ) : (
-        <>
-          <p>
-            Automóvel: {pedido.automovel.marca} {pedido.automovel.modelo} {pedido.automovel.ano}
-            {' '}(placa {pedido.automovel.placa})
-          </p>
-          <p>Retirada: {formatarData(pedido.dataInicio)}</p>
-          <p>Devolução: {formatarData(pedido.dataFim)}</p>
-        </>
+      <section className="cartao detalhe-tempo" aria-label="Andamento do pedido">
+        <LinhaDoTempo status={pedido.status} />
+      </section>
+
+      {pedido.justificativaParecer && (
+        <aside className="detalhe-parecer">
+          <strong>Parecer financeiro</strong>
+          <p>{pedido.justificativaParecer}</p>
+        </aside>
       )}
 
-      {erro && <p role="alert">{erro}</p>}
+      {erro && <p role="alert" style={{ marginBottom: '1.5rem' }}>{erro}</p>}
 
-      {emAnalise && !edicao && (
-        <button type="button" onClick={iniciarEdicao}>Modificar pedido</button>
-      )}
-      {podeCancelar && !edicao && (
-        <button type="button" onClick={cancelar}>Cancelar pedido</button>
-      )}
+      <div className="detalhe-grid">
+        <section className="cartao">
+          {edicao ? (
+            <form className="form-pilha" onSubmit={salvarEdicao}>
+              <h2>Modificar pedido</h2>
+              <label>
+                Automóvel
+                <select
+                  value={edicao.automovelId}
+                  onChange={(e) => setEdicao({ ...edicao, automovelId: e.target.value })}
+                  required
+                >
+                  {automoveis.map((a) => (
+                    <option key={a.id} value={a.id}>
+                      {a.marca} {a.modelo} {a.ano} - {a.placa}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <div className="campos-grid">
+                <label>
+                  Data de retirada
+                  <input
+                    type="date"
+                    value={edicao.dataInicio}
+                    onChange={(e) => setEdicao({ ...edicao, dataInicio: e.target.value })}
+                    required
+                  />
+                </label>
+                <label>
+                  Data de devolução
+                  <input
+                    type="date"
+                    min={edicao.dataInicio}
+                    value={edicao.dataFim}
+                    onChange={(e) => setEdicao({ ...edicao, dataFim: e.target.value })}
+                    required
+                  />
+                </label>
+              </div>
+              <div className="acoes-linha">
+                <button type="submit">Salvar alterações</button>
+                <button type="button" className="btn-secundario" onClick={() => setEdicao(null)}>
+                  Descartar
+                </button>
+              </div>
+            </form>
+          ) : (
+            <>
+              <div className="detalhe-carro"><CarroIlustracao /></div>
+              <h2>{automovel.marca} {automovel.modelo} {automovel.ano}</h2>
+              <dl className="detalhe-lista">
+                {ehAgente && (
+                  <div><dt>Cliente</dt><dd>{pedido.clienteNome}</dd></div>
+                )}
+                <div><dt>Placa</dt><dd>{automovel.placa}</dd></div>
+                <div><dt>Retirada</dt><dd>{formatarData(pedido.dataInicio)}</dd></div>
+                <div><dt>Devolução</dt><dd>{formatarData(pedido.dataFim)}</dd></div>
+                <div><dt>Período</dt><dd>{dias} {dias === 1 ? 'diária' : 'diárias'}</dd></div>
+                <div><dt>Pedido feito em</dt><dd>{formatarData(pedido.dataPedido)}</dd></div>
+              </dl>
+            </>
+          )}
+        </section>
+
+        <aside className="cartao detalhe-acoes">
+          <h2>Ações</h2>
+          {emAnalise && !edicao && (
+            <button type="button" className="btn-secundario" onClick={iniciarEdicao}>
+              Modificar pedido
+            </button>
+          )}
+          {podeCancelar && !edicao && (
+            <button type="button" className="btn-perigo" onClick={cancelar}>
+              Cancelar pedido
+            </button>
+          )}
+          {!emAnalise && !podeCancelar && (
+            <p className="detalhe-acoes-vazio">Nenhuma ação disponível para este status.</p>
+          )}
+          {edicao && (
+            <p className="detalhe-acoes-vazio">Finalize a edição ao lado para ver outras ações.</p>
+          )}
+        </aside>
+      </div>
 
       {ehAgente && emAnalise && !edicao && (
-        <form onSubmit={enviarParecer}>
+        <section className="cartao detalhe-analise">
           <h2>Análise financeira</h2>
-          <label>
-            Parecer
-            <select
-              value={parecer.aprovado}
-              onChange={(e) => setParecer({ ...parecer, aprovado: e.target.value })}
-            >
-              <option value="sim">Positivo (aprovar)</option>
-              <option value="nao">Negativo (reprovar)</option>
-            </select>
-          </label>
-          <label>
-            Justificativa
-            <textarea
-              maxLength={500}
-              value={parecer.justificativa}
-              onChange={(e) => setParecer({ ...parecer, justificativa: e.target.value })}
-            />
-          </label>
-          <button type="submit">Registrar parecer</button>
-        </form>
+          <p>Avalie o pedido e registre o parecer. O cliente verá a justificativa.</p>
+          <form className="form-pilha" onSubmit={enviarParecer}>
+            <label>
+              Parecer
+              <select
+                value={parecer.aprovado}
+                onChange={(e) => setParecer({ ...parecer, aprovado: e.target.value })}
+              >
+                <option value="sim">Positivo (aprovar)</option>
+                <option value="nao">Negativo (reprovar)</option>
+              </select>
+            </label>
+            <label>
+              Justificativa
+              <textarea
+                maxLength={500}
+                value={parecer.justificativa}
+                onChange={(e) => setParecer({ ...parecer, justificativa: e.target.value })}
+              />
+            </label>
+            <div className="acoes-linha">
+              <button type="submit">Registrar parecer</button>
+            </div>
+          </form>
+        </section>
       )}
-    </section>
+    </div>
   )
 }

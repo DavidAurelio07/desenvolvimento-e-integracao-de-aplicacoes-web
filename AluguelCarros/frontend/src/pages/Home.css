@@ -1,0 +1,147 @@
+/* ----- Banner ----- */
+.home-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 3rem 2.75rem 7.5rem;
+  border-radius: 22px;
+  background: linear-gradient(135deg, var(--verde) 0%, var(--verde-medio) 100%);
+  color: var(--creme);
+  box-shadow: var(--sombra-forte);
+}
+.home-sol {
+  position: absolute;
+  top: 2.2rem;
+  right: 19%;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fbe3a6, var(--ouro) 70%);
+  opacity: 0.95;
+}
+.home-serra { position: absolute; left: 0; bottom: 0; width: 100%; height: 130px; }
+.home-carro { position: absolute; right: 5%; bottom: 58px; width: 240px; color: var(--ouro); z-index: 1; }
+
+.home-texto { position: relative; z-index: 2; max-width: 34rem; }
+.home-etiqueta {
+  margin: 0 0 0.6rem;
+  color: var(--ouro);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.home-texto h1 { color: var(--creme); font-size: 2.6rem; margin-bottom: 0.75rem; }
+.home-texto p { color: #dbe6df; font-size: 1.05rem; }
+.home-botoes { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
+
+/* ----- Números ----- */
+.home-numeros {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: -3.2rem 1.5rem 0;
+  position: relative;
+  z-index: 3;
+}
+.home-numero {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 1.25rem;
+  background: var(--branco);
+  border: 1px solid var(--borda);
+  border-bottom: 4px solid var(--ouro);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra-forte);
+}
+.home-numero-icone {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--verde);
+  color: var(--ouro);
+}
+.home-numero strong { display: block; font-family: var(--fonte-titulo); font-size: 1.9rem; line-height: 1; }
+.home-numero div span { color: var(--texto-suave); font-size: 0.88rem; }
+
+/* ----- Seções ----- */
+.home-secao { margin-top: 3rem; }
+.home-secao > h2 { font-size: 1.5rem; margin-bottom: 1.1rem; }
+
+.home-atalhos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+.home-atalho {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+  padding: 1.4rem;
+  background: var(--branco);
+  border: 1px solid var(--borda);
+  border-left: 5px solid var(--ouro);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+  color: var(--texto);
+  text-decoration: none;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.home-atalho:hover { color: var(--texto); transform: translateY(-3px); box-shadow: var(--sombra-forte); }
+.home-atalho-icone {
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--verde);
+  color: var(--ouro);
+}
+.home-atalho-titulo { font-family: var(--fonte-titulo); font-size: 1.15rem; font-weight: 700; }
+.home-atalho-texto { color: var(--texto-suave); font-weight: 400; font-size: 0.95rem; }
+
+.home-passos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  counter-reset: passo;
+}
+.home-passo {
+  position: relative;
+  padding: 1.5rem 1.4rem 1.4rem;
+  background: var(--creme-escuro);
+  border-radius: var(--raio);
+}
+.home-passo::before {
+  counter-increment: passo;
+  content: counter(passo);
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin-bottom: 0.8rem;
+  border-radius: 50%;
+  background: var(--ouro);
+  color: var(--verde);
+  font-weight: 700;
+}
+.home-passo h3 { margin-bottom: 0.3rem; }
+.home-passo p { margin: 0; color: var(--texto-suave); font-size: 0.95rem; }
+
+@media (max-width: 860px) {
+  .home-carro, .home-sol { display: none; }
+  .home-hero { padding: 2rem 1.5rem 6.5rem; }
+  .home-texto h1 { font-size: 2rem; }
+  .home-numeros { grid-template-columns: 1fr; margin: -3rem 0.5rem 0; }
+  .home-passos { grid-template-columns: 1fr; }
+}

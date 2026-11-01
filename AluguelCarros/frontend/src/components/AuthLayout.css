@@ -1,0 +1,94 @@
+.auth {
+  display: grid;
+  grid-template-columns: minmax(340px, 5fr) 7fr;
+  min-height: 100vh;
+}
+
+/* ----- Painel esquerdo ----- */
+.auth-painel {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2.25rem 2.5rem 9rem;
+  background: linear-gradient(160deg, var(--verde) 0%, var(--verde-medio) 100%);
+  color: var(--creme);
+}
+.auth-sol {
+  position: absolute;
+  top: 24%;
+  right: 12%;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fbe3a6, var(--ouro) 70%);
+  opacity: 0.92;
+}
+.auth-serra {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 170px;
+}
+.auth-carro {
+  position: absolute;
+  right: 6%;
+  bottom: 26px;
+  width: 230px;
+  color: var(--ouro);
+  z-index: 1;
+}
+.auth-texto { position: relative; z-index: 2; max-width: 30rem; }
+.auth-texto h2 {
+  color: var(--creme);
+  font-size: 2.1rem;
+  line-height: 1.15;
+  margin-bottom: 1.5rem;
+}
+.auth-vantagens {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+.auth-vantagens li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1rem;
+}
+.auth-check {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--ouro);
+  color: var(--verde);
+}
+.auth-painel > .marca { position: relative; z-index: 2; }
+
+/* ----- Conteúdo ----- */
+.auth-conteudo {
+  display: grid;
+  place-items: center;
+  padding: 2.5rem 1.5rem;
+  background: var(--creme);
+}
+.auth-caixa { width: 100%; max-width: 440px; }
+.auth-caixa.larga { max-width: 640px; }
+.auth-caixa > h1 { font-size: 2rem; margin-bottom: 0.35rem; }
+.auth-sub { color: var(--texto-suave); margin-bottom: 1.75rem; }
+
+@media (max-width: 900px) {
+  .auth { grid-template-columns: 1fr; min-height: 0; }
+  .auth-painel { padding: 1.5rem 1.5rem 4.5rem; }
+  .auth-texto, .auth-sol, .auth-carro { display: none; }
+  .auth-serra { height: 90px; }
+  .auth-conteudo { padding: 2rem 1.25rem 3rem; }
+}

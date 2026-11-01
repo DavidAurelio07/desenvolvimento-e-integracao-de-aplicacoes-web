@@ -1,0 +1,80 @@
+.detalhe-voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+  font-size: 0.92rem;
+}
+.detalhe-voltar svg { transform: rotate(180deg); }
+
+.detalhe-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.detalhe-cabecalho h1 { margin: 0; }
+.detalhe-etiqueta {
+  margin: 0 0 0.2rem;
+  color: var(--ouro-escuro);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.detalhe-tempo { padding: 1.75rem 1.5rem; margin-bottom: 1.5rem; }
+
+.detalhe-parecer {
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.25rem;
+  border-left: 5px solid var(--ouro);
+  border-radius: var(--raio-pequeno);
+  background: var(--ouro-claro);
+  color: #4d3600;
+}
+.detalhe-parecer strong { display: block; margin-bottom: 0.2rem; }
+.detalhe-parecer p { margin: 0; }
+
+.detalhe-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.detalhe-carro {
+  margin-bottom: 1rem;
+  padding: 1rem 1.5rem 0.5rem;
+  border-radius: 12px;
+  background: linear-gradient(180deg, var(--creme) 0%, var(--creme-escuro) 100%);
+  color: var(--verde);
+}
+.detalhe-carro svg { display: block; width: 100%; max-width: 320px; margin: 0 auto; height: auto; }
+
+.detalhe-lista { display: grid; gap: 0.6rem; margin: 0; }
+.detalhe-lista div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--borda);
+}
+.detalhe-lista dt { color: var(--texto-suave); }
+.detalhe-lista dd { margin: 0; font-weight: 600; text-align: right; }
+
+.detalhe-acoes { display: grid; gap: 0.75rem; }
+.detalhe-acoes h2 { margin: 0 0 0.25rem; }
+.detalhe-acoes-vazio { margin: 0; color: var(--texto-suave); font-size: 0.95rem; }
+
+.detalhe-analise {
+  margin-top: 1.5rem;
+  border-top: 5px solid var(--ouro);
+}
+.detalhe-analise p { color: var(--texto-suave); }
+
+@media (max-width: 860px) {
+  .detalhe-grid { grid-template-columns: 1fr; }
+}

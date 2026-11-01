@@ -1,0 +1,59 @@
+.carro {
+  font-weight: 400;
+  font-size: 1rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--branco);
+  border: 2px solid var(--borda);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+
+.carro-ilustracao {
+  padding: 1.1rem 1.25rem 0.4rem;
+  background: linear-gradient(180deg, var(--creme) 0%, var(--creme-escuro) 100%);
+}
+.carro-ilustracao svg { display: block; width: 100%; max-height: 108px; }
+
+.carro-cor-0 .carro-ilustracao { color: var(--verde); }
+.carro-cor-1 .carro-ilustracao { color: var(--ouro); }
+.carro-cor-2 .carro-ilustracao { color: #5b625d; }
+.carro-cor-3 .carro-ilustracao { color: var(--verde-suave); }
+
+.carro-info { padding: 0.9rem 1.1rem 1.1rem; }
+.carro-info h3 { margin: 0 0 0.15rem; }
+.carro-info p { margin: 0; color: var(--texto-suave); font-size: 0.92rem; }
+.carro-matricula {
+  display: inline-block;
+  margin-top: 0.6rem;
+  padding: 0.15rem 0.65rem;
+  border-radius: 999px;
+  background: var(--creme-escuro);
+  color: var(--texto-suave);
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+/* Versão selecionável (usada ao criar um pedido) */
+.carro-selecionavel { cursor: pointer; }
+.carro-selecionavel:hover { border-color: var(--ouro); transform: translateY(-2px); }
+.carro-selecionavel:has(input:focus-visible) { outline: 3px solid var(--ouro); outline-offset: 2px; }
+.carro-ativo {
+  border-color: var(--ouro);
+  box-shadow: 0 0 0 4px rgba(244, 185, 66, 0.3), var(--sombra);
+}
+.carro-check {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--verde);
+  color: var(--ouro);
+}

@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/useAuth'
 import { atualizarPerfil, buscarPerfil, excluirPerfil } from '../services/clienteService'
 import { mensagemDeErro } from '../services/api'
+import { iniciais } from '../utils/formatadores'
 import RendimentosEditor from '../components/RendimentosEditor'
+import './Perfil.css'
 
 export default function Perfil() {
   const { logout } = useAuth()
@@ -82,53 +84,108 @@ export default function Perfil() {
   }
 
   if (!perfil) {
-    return erro ? <p role="alert">{erro}</p> : <p>Carregando...</p>
+    return (
+      <div className="pagina">
+        {erro ? <p role="alert">{erro}</p> : <p>Carregando...</p>}
+      </div>
+    )
   }
 
   return (
-    <section>
-      <h1>Meu cadastro</h1>
-      <form onSubmit={salvar}>
-        <label>
-          Usuário
-          <input value={perfil.login} disabled />
-        </label>
-        <label>
-          CPF
-          <input value={perfil.cpf} disabled />
-        </label>
-        <label>
-          Nome
-          <input name="nome" value={form.nome} onChange={atualizar} required />
-        </label>
-        <label>
-          RG
-          <input name="rg" value={form.rg} onChange={atualizar} required />
-        </label>
-        <label>
-          Endereço
-          <input name="endereco" value={form.endereco} onChange={atualizar} required />
-        </label>
-        <label>
-          Profissão
-          <input name="profissao" value={form.profissao} onChange={atualizar} required />
-        </label>
-        <label>
-          Nova senha (deixe em branco para manter a atual)
-          <input type="password" name="senha" value={form.senha} onChange={atualizar} minLength={6} />
-        </label>
+    <div className="pagina">
+      <header className="cabecalho-pagina">
+        <div>
+          <h1>Meu cadastro</h1>
+          <p className="subtitulo">Consulte e mantenha seus dados atualizados.</p>
+        </div>
+      </header>
 
-        <RendimentosEditor rendimentos={rendimentos} onChange={setRendimentos} />
+      <div className="perfil-grid">
+        <aside className="cartao perfil-resumo">
+          <span className="perfil-avatar" aria-hidden="true">{iniciais(perfil.nome)}</span>
+          <h2>{perfil.nome}</h2>
+          <p className="perfil-usuario">@{perfil.login}</p>
+          <dl className="perfil-fatos">
+            <div><dt>CPF</dt><dd>{perfil.cpf}</dd></div>
+            <div><dt>Profissão</dt><dd>{perfil.profissao}</dd></div>
+            <div><dt>Rendimentos</dt><dd>{perfil.rendimentos.length} de 3</dd></div>
+          </dl>
+        </aside>
 
-        {mensagem && <p>{mensagem}</p>}
-        {erro && <p role="alert">{erro}</p>}
-        <button type="submit" disabled={salvando}>
-          {salvando ? 'Salvando...' : 'Salvar alterações'}
-        </button>
-      </form>
+        <div className="perfil-coluna">
+          <form className="perfil-coluna" onSubmit={salvar}>
+            <section className="cartao perfil-secao">
+              <h2>Dados pessoais</h2>
+              <div className="campos-grid">
+                <label>
+                  Usuário
+                  <input value={perfil.login} disabled />
+                </label>
+                <label>
+                  CPF
+                  <input value={perfil.cpf} disabled />
+                </label>
+                <label className="campo-largo">
+                  Nome completo
+                  <input name="nome" value={form.nome} onChange={atualizar} required />
+                </label>
+                <label>
+                  RG
+                  <input name="rg" value={form.rg} onChange={atualizar} required />
+                </label>
+                <label>
+                  Profissão
+                  <input name="profissao" value={form.profissao} onChange={atualizar} required />
+                </label>
+                <label className="campo-largo">
+                  Endereço
+                  <input name="endereco" value={form.endereco} onChange={atualizar} required />
+                </label>
+              </div>
+            </section>
 
-      <hr />
-      <button type="button" onClick={excluir}>Excluir meu cadastro</button>
-    </section>
+            <section className="cartao perfil-secao">
+              <h2>Rendimentos</h2>
+              <RendimentosEditor rendimentos={rendimentos} onChange={setRendimentos} />
+            </section>
+
+            <section className="cartao perfil-secao">
+              <h2>Segurança</h2>
+              <label>
+                Nova senha
+                <input
+                  type="password"
+                  name="senha"
+                  autoComplete="new-password"
+                  value={form.senha}
+                  onChange={atualizar}
+                  minLength={6}
+                />
+              </label>
+              <p className="perfil-dica">Deixe em branco para manter a senha atual.</p>
+            </section>
+
+            {mensagem && <p className="sucesso">{mensagem}</p>}
+            {erro && <p role="alert">{erro}</p>}
+            <div className="perfil-barra">
+              <button type="submit" disabled={salvando}>
+                {salvando ? 'Salvando...' : 'Salvar alterações'}
+              </button>
+            </div>
+          </form>
+
+          <section className="cartao perfil-perigo">
+            <h2>Excluir cadastro</h2>
+            <p>
+              Ao excluir, seus dados são removidos do sistema. Isso só é possível
+              quando não há pedidos de aluguel associados ao seu cadastro.
+            </p>
+            <button type="button" className="btn-perigo" onClick={excluir}>
+              Excluir meu cadastro
+            </button>
+          </section>
+        </div>
+      </div>
+    </div>
   )
 }

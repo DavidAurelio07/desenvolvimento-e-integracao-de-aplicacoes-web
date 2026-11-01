@@ -1,0 +1,29 @@
+.auto-grid {
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+.auto-formulario {
+  position: sticky;
+  top: 6.5rem;
+  border-top: 5px solid var(--ouro);
+}
+.auto-contador {
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  background: var(--verde);
+  color: var(--creme);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.auto-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 900px) {
+  .auto-grid { grid-template-columns: 1fr; }
+  .auto-formulario { position: static; }
+}

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { cadastrarAutomovel, listarAutomoveis } from '../services/automovelService'
 import { mensagemDeErro } from '../services/api'
+import CartaoCarro from '../components/CartaoCarro'
+import './Automoveis.css'
 
 const formInicial = { matricula: '', ano: '', marca: '', modelo: '', placa: '' }
 
@@ -36,66 +38,62 @@ export default function Automoveis() {
   }
 
   return (
-    <section>
-      <h1>Automóveis</h1>
+    <div className="pagina">
+      <header className="cabecalho-pagina">
+        <div>
+          <h1>Automóveis</h1>
+          <p className="subtitulo">Cadastre e consulte os carros disponíveis para aluguel.</p>
+        </div>
+        {automoveis && <span className="auto-contador">{automoveis.length} cadastrados</span>}
+      </header>
 
-      <form onSubmit={enviar}>
-        <h2>Cadastrar automóvel</h2>
-        <label>
-          Matrícula
-          <input name="matricula" value={form.matricula} onChange={atualizar} required />
-        </label>
-        <label>
-          Ano
-          <input type="number" name="ano" min="1900" value={form.ano} onChange={atualizar} required />
-        </label>
-        <label>
-          Marca
-          <input name="marca" value={form.marca} onChange={atualizar} required />
-        </label>
-        <label>
-          Modelo
-          <input name="modelo" value={form.modelo} onChange={atualizar} required />
-        </label>
-        <label>
-          Placa
-          <input name="placa" value={form.placa} onChange={atualizar} required />
-        </label>
-        {erro && <p role="alert">{erro}</p>}
-        <button type="submit" disabled={salvando}>
-          {salvando ? 'Salvando...' : 'Cadastrar'}
-        </button>
-      </form>
+      <div className="auto-grid">
+        <section className="cartao auto-formulario">
+          <h2>Cadastrar automóvel</h2>
+          <form className="form-pilha" onSubmit={enviar}>
+            <label>
+              Marca
+              <input name="marca" value={form.marca} onChange={atualizar} required />
+            </label>
+            <label>
+              Modelo
+              <input name="modelo" value={form.modelo} onChange={atualizar} required />
+            </label>
+            <div className="campos-grid">
+              <label>
+                Ano
+                <input type="number" name="ano" min="1900" value={form.ano} onChange={atualizar} required />
+              </label>
+              <label>
+                Placa
+                <input name="placa" value={form.placa} onChange={atualizar} required />
+              </label>
+            </div>
+            <label>
+              Matrícula
+              <input name="matricula" value={form.matricula} onChange={atualizar} required />
+            </label>
+            {erro && <p role="alert">{erro}</p>}
+            <button type="submit" className="btn-bloco" disabled={salvando}>
+              {salvando ? 'Salvando...' : 'Cadastrar automóvel'}
+            </button>
+          </form>
+        </section>
 
-      <h2>Automóveis cadastrados</h2>
-      {!automoveis ? (
-        <p>Carregando...</p>
-      ) : automoveis.length === 0 ? (
-        <p>Nenhum automóvel cadastrado.</p>
-      ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Matrícula</th>
-              <th>Marca</th>
-              <th>Modelo</th>
-              <th>Ano</th>
-              <th>Placa</th>
-            </tr>
-          </thead>
-          <tbody>
-            {automoveis.map((a) => (
-              <tr key={a.id}>
-                <td>{a.matricula}</td>
-                <td>{a.marca}</td>
-                <td>{a.modelo}</td>
-                <td>{a.ano}</td>
-                <td>{a.placa}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-    </section>
+        <section>
+          {!automoveis ? (
+            <p>Carregando...</p>
+          ) : automoveis.length === 0 ? (
+            <p className="vazio">Nenhum automóvel cadastrado.</p>
+          ) : (
+            <div className="auto-lista">
+              {automoveis.map((a) => (
+                <CartaoCarro key={a.id} automovel={a} />
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
+    </div>
   )
 }
