@@ -4,7 +4,7 @@ import { listarAutomoveis } from '../services/automovelService'
 import { criarPedido } from '../services/pedidoService'
 import { mensagemDeErro } from '../services/api'
 import { diasEntre, formatarData } from '../utils/formatadores'
-import CarroIlustracao from '../components/CarroIlustracao'
+import FotoCarro from '../components/FotoCarro'
 import CartaoCarro from '../components/CartaoCarro'
 import './NovoPedido.css'
 
@@ -97,7 +97,7 @@ export default function NovoPedido() {
 
           {escolhido ? (
             <>
-              <div className="novo-resumo-carro"><CarroIlustracao /></div>
+              <div className="novo-resumo-carro"><FotoCarro automovel={escolhido} /></div>
               <dl className="novo-resumo-lista">
                 <div><dt>Automóvel</dt><dd>{escolhido.marca} {escolhido.modelo}</dd></div>
                 <div><dt>Placa</dt><dd>{escolhido.placa}</dd></div>

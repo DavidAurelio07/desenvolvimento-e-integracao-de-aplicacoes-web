@@ -5,6 +5,11 @@ export async function listarAutomoveis() {
   return data
 }
 
+export async function atualizarAutomovel(id, automovel) {
+  const { data } = await api.put(`/automoveis/${id}`, automovel)
+  return data
+}
+
 export async function cadastrarAutomovel(automovel) {
   const { data } = await api.post('/automoveis', automovel)
   return data

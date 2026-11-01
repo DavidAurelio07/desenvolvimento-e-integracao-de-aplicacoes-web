@@ -25,6 +25,9 @@ public class Automovel {
     @Column(nullable = false, unique = true)
     private String placa;
 
+    @Column(columnDefinition = "text")
+    private String imagemUrl;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "proprietario_id", nullable = false)
     private Usuario proprietario;
@@ -83,5 +86,13 @@ public class Automovel {
 
     public void setProprietario(Usuario proprietario) {
         this.proprietario = proprietario;
+    }
+
+    public String getImagemUrl() {
+        return imagemUrl;
+    }
+
+    public void setImagemUrl(String imagemUrl) {
+        this.imagemUrl = imagemUrl;
     }
 }

@@ -151,7 +151,7 @@ public class PedidoService {
     private PedidoResponse converter(PedidoAluguel p) {
         Automovel a = p.getAutomovel();
         AutomovelResponse automovel = new AutomovelResponse(a.getId(), a.getMatricula(),
-                a.getAno(), a.getMarca(), a.getModelo(), a.getPlaca());
+                a.getAno(), a.getMarca(), a.getModelo(), a.getPlaca(), a.getImagemUrl());
 
         List<Avaliacao> avaliacoes = p.getAvaliacoes();
         String justificativa = avaliacoes.isEmpty()

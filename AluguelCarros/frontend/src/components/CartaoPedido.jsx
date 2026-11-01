@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { formatarData } from '../utils/formatadores'
-import CarroIlustracao from './CarroIlustracao'
+import FotoCarro from './FotoCarro'
 import Icone from './Icone'
 import StatusBadge from './StatusBadge'
 import './CartaoPedido.css'
@@ -16,7 +16,7 @@ export default function CartaoPedido({ pedido, mostrarCliente = false }) {
       </div>
 
       <div className="pedido-corpo">
-        <div className="pedido-carro"><CarroIlustracao /></div>
+        <div className="pedido-carro"><FotoCarro automovel={automovel} /></div>
         <div>
           <h3>{automovel.marca} {automovel.modelo}</h3>
           <p>{automovel.ano} · Placa {automovel.placa}</p>

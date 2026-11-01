@@ -27,3 +27,15 @@
   .auto-grid { grid-template-columns: 1fr; }
   .auto-formulario { position: static; }
 }
+
+.auto-previa {
+  overflow: hidden;
+  border: 1px dashed #cfc8b3;
+  border-radius: var(--raio-pequeno);
+  color: var(--verde);
+}
+.auto-dica {
+  margin: 0;
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+}

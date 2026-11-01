@@ -36,13 +36,14 @@
 .pedido-corpo { display: flex; align-items: center; gap: 1rem; }
 .pedido-carro {
   flex: none;
-  width: 92px;
-  padding: 0.4rem 0.5rem 0.2rem;
+  width: 104px;
+  overflow: hidden;
   border-radius: 10px;
   background: var(--creme);
   color: var(--verde);
 }
-.pedido-carro svg { display: block; width: 100%; height: auto; }
+.pedido-carro .foto-carro { aspect-ratio: 4 / 3; }
+.pedido-carro .foto-carro-ilustracao { padding: 0.3rem 0.4rem; }
 .pedido-corpo h3 { margin: 0; }
 .pedido-corpo p { margin: 0; color: var(--texto-suave); font-size: 0.9rem; }
 

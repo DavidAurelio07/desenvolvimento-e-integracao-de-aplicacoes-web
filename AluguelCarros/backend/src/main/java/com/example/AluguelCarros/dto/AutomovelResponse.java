@@ -6,5 +6,6 @@ public record AutomovelResponse(
         Integer ano,
         String marca,
         String modelo,
-        String placa) {
+        String placa,
+        String imagemUrl) {
 }

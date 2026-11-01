@@ -47,12 +47,12 @@
 
 .detalhe-carro {
   margin-bottom: 1rem;
-  padding: 1rem 1.5rem 0.5rem;
+  overflow: hidden;
   border-radius: 12px;
-  background: linear-gradient(180deg, var(--creme) 0%, var(--creme-escuro) 100%);
   color: var(--verde);
 }
-.detalhe-carro svg { display: block; width: 100%; max-width: 320px; margin: 0 auto; height: auto; }
+.detalhe-carro .foto-carro { aspect-ratio: 16 / 9; max-height: 340px; }
+.detalhe-carro .foto-carro-ilustracao svg { width: 100%; max-width: 320px; }
 
 .detalhe-lista { display: grid; gap: 0.6rem; margin: 0; }
 .detalhe-lista div {

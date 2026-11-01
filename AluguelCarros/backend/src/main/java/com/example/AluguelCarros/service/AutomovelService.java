@@ -38,18 +38,35 @@ public class AutomovelService {
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não encontrado."));
 
         Automovel automovel = new Automovel();
-        automovel.setMatricula(request.matricula());
-        automovel.setAno(request.ano());
-        automovel.setMarca(request.marca());
-        automovel.setModelo(request.modelo());
-        automovel.setPlaca(request.placa());
+        preencher(automovel, request);
         automovel.setProprietario(proprietario);
 
         return converter(automovelRepository.save(automovel));
     }
 
+    @Transactional
+    public AutomovelResponse atualizar(Long id, AutomovelRequest request) {
+        Automovel automovel = automovelRepository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Automóvel não encontrado."));
+        if (automovelRepository.existsByPlacaAndIdNot(request.placa(), id)) {
+            throw new ConflitoException("Placa já cadastrada.");
+        }
+        preencher(automovel, request);
+        return converter(automovelRepository.save(automovel));
+    }
+
+    private void preencher(Automovel automovel, AutomovelRequest request) {
+        automovel.setMatricula(request.matricula());
+        automovel.setAno(request.ano());
+        automovel.setMarca(request.marca());
+        automovel.setModelo(request.modelo());
+        automovel.setPlaca(request.placa());
+        automovel.setImagemUrl(
+                request.imagemUrl() == null || request.imagemUrl().isBlank() ? null : request.imagemUrl().trim());
+    }
+
     private AutomovelResponse converter(Automovel a) {
         return new AutomovelResponse(a.getId(), a.getMatricula(), a.getAno(),
-                a.getMarca(), a.getModelo(), a.getPlaca());
+                a.getMarca(), a.getModelo(), a.getPlaca(), a.getImagemUrl());
     }
 }

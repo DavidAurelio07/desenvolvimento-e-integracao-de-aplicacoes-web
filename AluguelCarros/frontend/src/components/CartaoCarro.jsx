@@ -1,4 +1,4 @@
-import CarroIlustracao from './CarroIlustracao'
+import FotoCarro from './FotoCarro'
 import Icone from './Icone'
 import './CartaoCarro.css'
 
@@ -7,18 +7,28 @@ export default function CartaoCarro({
   selecionavel = false,
   selecionado = false,
   onSelecionar,
+  onEditar,
 }) {
   const classes = `carro carro-cor-${automovel.id % 4}`
 
   const conteudo = (
     <>
-      <div className="carro-ilustracao">
-        <CarroIlustracao />
+      <div className="carro-visual">
+        <FotoCarro automovel={automovel} />
       </div>
       <div className="carro-info">
         <h3>{automovel.marca} {automovel.modelo}</h3>
         <p>{automovel.ano} · Placa {automovel.placa}</p>
         <span className="carro-matricula">Matrícula {automovel.matricula}</span>
+        {onEditar && (
+          <button
+            type="button"
+            className="btn-secundario carro-editar"
+            onClick={() => onEditar(automovel)}
+          >
+            Editar
+          </button>
+        )}
       </div>
     </>
   )

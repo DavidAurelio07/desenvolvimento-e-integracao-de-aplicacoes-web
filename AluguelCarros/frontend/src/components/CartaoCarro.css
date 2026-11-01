@@ -12,16 +12,12 @@
   transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
 }
 
-.carro-ilustracao {
-  padding: 1.1rem 1.25rem 0.4rem;
-  background: linear-gradient(180deg, var(--creme) 0%, var(--creme-escuro) 100%);
-}
-.carro-ilustracao svg { display: block; width: 100%; max-height: 108px; }
+.carro-visual { overflow: hidden; }
 
-.carro-cor-0 .carro-ilustracao { color: var(--verde); }
-.carro-cor-1 .carro-ilustracao { color: var(--ouro); }
-.carro-cor-2 .carro-ilustracao { color: #5b625d; }
-.carro-cor-3 .carro-ilustracao { color: var(--verde-suave); }
+.carro-cor-0 .carro-visual { color: var(--verde); }
+.carro-cor-1 .carro-visual { color: var(--ouro); }
+.carro-cor-2 .carro-visual { color: #5b625d; }
+.carro-cor-3 .carro-visual { color: var(--verde-suave); }
 
 .carro-info { padding: 0.9rem 1.1rem 1.1rem; }
 .carro-info h3 { margin: 0 0 0.15rem; }
@@ -56,4 +52,12 @@
   border-radius: 50%;
   background: var(--verde);
   color: var(--ouro);
+}
+
+.carro-editar {
+  display: flex;
+  width: 100%;
+  margin-top: 0.9rem;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
 }

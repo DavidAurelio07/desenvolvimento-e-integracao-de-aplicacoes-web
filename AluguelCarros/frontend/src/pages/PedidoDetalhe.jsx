@@ -10,7 +10,7 @@ import {
 } from '../services/pedidoService'
 import { mensagemDeErro } from '../services/api'
 import { diasEntre, formatarData } from '../utils/formatadores'
-import CarroIlustracao from '../components/CarroIlustracao'
+import FotoCarro from '../components/FotoCarro'
 import Icone from '../components/Icone'
 import LinhaDoTempo from '../components/LinhaDoTempo'
 import StatusBadge from '../components/StatusBadge'
@@ -175,7 +175,7 @@ export default function PedidoDetalhe() {
             </form>
           ) : (
             <>
-              <div className="detalhe-carro"><CarroIlustracao /></div>
+              <div className="detalhe-carro"><FotoCarro automovel={automovel} /></div>
               <h2>{automovel.marca} {automovel.modelo} {automovel.ano}</h2>
               <dl className="detalhe-lista">
                 {ehAgente && (
