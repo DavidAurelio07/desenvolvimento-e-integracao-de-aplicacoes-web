@@ -29,3 +29,13 @@ export async function avaliarPedido(id, avaliacao) {
   const { data } = await api.post(`/pedidos/${id}/avaliacoes`, avaliacao)
   return data
 }
+
+export async function executarContrato(id, contrato) {
+  const { data } = await api.post(`/pedidos/${id}/contrato`, contrato)
+  return data
+}
+
+export async function concederCredito(id, credito) {
+  const { data } = await api.post(`/pedidos/${id}/credito`, credito)
+  return data
+}

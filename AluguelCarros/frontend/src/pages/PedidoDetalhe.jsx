@@ -7,14 +7,23 @@ import {
   avaliarPedido,
   buscarPedido,
   cancelarPedido,
+  concederCredito,
+  executarContrato,
 } from '../services/pedidoService'
 import { mensagemDeErro } from '../services/api'
-import { diasEntre, formatarData } from '../utils/formatadores'
+import { diasEntre, formatarData, formatarMoeda } from '../utils/formatadores'
 import FotoCarro from '../components/FotoCarro'
 import Icone from '../components/Icone'
 import LinhaDoTempo from '../components/LinhaDoTempo'
 import StatusBadge from '../components/StatusBadge'
 import './PedidoDetalhe.css'
+
+// "para" indica qual tipo de agente pode escolher a opção (vazio = qualquer agente)
+const TIPOS_CONTRATO = [
+  { valor: 'PROPRIEDADE_CLIENTE', rotulo: 'Propriedade do cliente', para: null },
+  { valor: 'PROPRIEDADE_EMPRESA', rotulo: 'Propriedade da empresa', para: 'EMPRESA' },
+  { valor: 'PROPRIEDADE_BANCO', rotulo: 'Propriedade do banco', para: 'BANCO' },
+]
 
 export default function PedidoDetalhe() {
   const { id } = useParams()
@@ -25,6 +34,8 @@ export default function PedidoDetalhe() {
   const [automoveis, setAutomoveis] = useState([])
   const [edicao, setEdicao] = useState(null)
   const [parecer, setParecer] = useState({ aprovado: 'sim', justificativa: '' })
+  const [contratoForm, setContratoForm] = useState({ tipo: 'PROPRIEDADE_CLIENTE', valorMensal: '' })
+  const [creditoForm, setCreditoForm] = useState({ valorFinanciado: '', taxaJuros: '', prazoMeses: '' })
   const [erro, setErro] = useState('')
 
   useEffect(() => {
@@ -86,6 +97,37 @@ export default function PedidoDetalhe() {
     }
   }
 
+  async function enviarContrato(e) {
+    e.preventDefault()
+    setErro('')
+    try {
+      setPedido(
+        await executarContrato(id, {
+          tipo: contratoForm.tipo,
+          valorMensal: Number(contratoForm.valorMensal),
+        }),
+      )
+    } catch (err) {
+      setErro(mensagemDeErro(err, 'Não foi possível executar o contrato.'))
+    }
+  }
+
+  async function enviarCredito(e) {
+    e.preventDefault()
+    setErro('')
+    try {
+      setPedido(
+        await concederCredito(id, {
+          valorFinanciado: Number(creditoForm.valorFinanciado),
+          taxaJuros: Number(creditoForm.taxaJuros),
+          prazoMeses: Number(creditoForm.prazoMeses),
+        }),
+      )
+    } catch (err) {
+      setErro(mensagemDeErro(err, 'Não foi possível registrar o contrato de crédito.'))
+    }
+  }
+
   if (!pedido) {
     return (
       <div className="pagina">
@@ -98,6 +140,16 @@ export default function PedidoDetalhe() {
   const emAnalise = pedido.status === 'EM_ANALISE'
   const podeCancelar = !ehAgente && ['EM_ANALISE', 'APROVADO'].includes(pedido.status)
   const dias = diasEntre(pedido.dataInicio, pedido.dataFim)
+  const { contrato } = pedido
+  const rotuloTipo = (valor) => TIPOS_CONTRATO.find((t) => t.valor === valor)?.rotulo ?? valor
+  const tiposDisponiveis = TIPOS_CONTRATO.filter((t) => !t.para || t.para === usuario?.tipoAgente)
+  const podeExecutarContrato = ehAgente && pedido.status === 'APROVADO'
+  const podeConcederCredito =
+    ehAgente &&
+    usuario?.tipoAgente === 'BANCO' &&
+    pedido.status === 'CONTRATO_EXECUTADO' &&
+    contrato &&
+    !contrato.credito
 
   return (
     <div className="pagina">
@@ -203,7 +255,10 @@ export default function PedidoDetalhe() {
               Cancelar pedido
             </button>
           )}
-          {!emAnalise && !podeCancelar && (
+          {(podeExecutarContrato || podeConcederCredito) && !edicao && (
+            <p className="detalhe-acoes-vazio">Use o painel abaixo para dar andamento ao pedido.</p>
+          )}
+          {!emAnalise && !podeCancelar && !podeExecutarContrato && !podeConcederCredito && (
             <p className="detalhe-acoes-vazio">Nenhuma ação disponível para este status.</p>
           )}
           {edicao && (
@@ -211,6 +266,121 @@ export default function PedidoDetalhe() {
           )}
         </aside>
       </div>
+
+
+      {contrato && (
+        <section className="cartao detalhe-contrato">
+          <h2>Contrato de aluguel</h2>
+          <div className="detalhe-contrato-grid">
+            <dl className="detalhe-lista">
+              <div><dt>Tipo</dt><dd>{rotuloTipo(contrato.tipo)}</dd></div>
+              <div><dt>Valor mensal</dt><dd>{formatarMoeda(contrato.valorMensal)}</dd></div>
+              <div><dt>Assinado em</dt><dd>{formatarData(contrato.dataAssinatura)}</dd></div>
+              <div><dt>Executado por</dt><dd>{contrato.agenteNome}</dd></div>
+              <div><dt>Proprietário do automóvel</dt><dd>{contrato.proprietarioNome}</dd></div>
+            </dl>
+            <div className="detalhe-credito">
+              <h3>Contrato de crédito</h3>
+              {contrato.credito ? (
+                <dl className="detalhe-lista">
+                  <div><dt>Banco</dt><dd>{contrato.credito.bancoNome}</dd></div>
+                  <div><dt>Valor financiado</dt><dd>{formatarMoeda(contrato.credito.valorFinanciado)}</dd></div>
+                  <div><dt>Taxa de juros</dt><dd>{contrato.credito.taxaJuros}% ao mês</dd></div>
+                  <div><dt>Prazo</dt><dd>{contrato.credito.prazoMeses} meses</dd></div>
+                </dl>
+              ) : (
+                <p className="detalhe-acoes-vazio">Este aluguel não possui contrato de crédito.</p>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {podeExecutarContrato && (
+        <section className="cartao detalhe-analise">
+          <h2>Executar contrato</h2>
+          <p>
+            O tipo do contrato define quem passa a ser o proprietário do automóvel.
+          </p>
+          <form className="form-pilha" onSubmit={enviarContrato}>
+            <div className="campos-grid">
+              <label>
+                Tipo de contrato
+                <select
+                  value={contratoForm.tipo}
+                  onChange={(e) => setContratoForm({ ...contratoForm, tipo: e.target.value })}
+                >
+                  {tiposDisponiveis.map((t) => (
+                    <option key={t.valor} value={t.valor}>{t.rotulo}</option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Valor mensal (R$)
+                <input
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                  value={contratoForm.valorMensal}
+                  onChange={(e) => setContratoForm({ ...contratoForm, valorMensal: e.target.value })}
+                  required
+                />
+              </label>
+            </div>
+            <div className="acoes-linha">
+              <button type="submit">Executar contrato</button>
+            </div>
+          </form>
+        </section>
+      )}
+
+      {podeConcederCredito && (
+        <section className="cartao detalhe-analise">
+          <h2>Conceder crédito</h2>
+          <p>Associe a este aluguel um contrato de crédito do seu banco.</p>
+          <form className="form-pilha" onSubmit={enviarCredito}>
+            <div className="campos-grid">
+              <label>
+                Valor financiado (R$)
+                <input
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                  value={creditoForm.valorFinanciado}
+                  onChange={(e) => setCreditoForm({ ...creditoForm, valorFinanciado: e.target.value })}
+                  required
+                />
+              </label>
+              <label>
+                Taxa de juros (% ao mês)
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={creditoForm.taxaJuros}
+                  onChange={(e) => setCreditoForm({ ...creditoForm, taxaJuros: e.target.value })}
+                  required
+                />
+              </label>
+              <label>
+                Prazo (meses)
+                <input
+                  type="number"
+                  min="1"
+                  max="600"
+                  step="1"
+                  value={creditoForm.prazoMeses}
+                  onChange={(e) => setCreditoForm({ ...creditoForm, prazoMeses: e.target.value })}
+                  required
+                />
+              </label>
+            </div>
+            <div className="acoes-linha">
+              <button type="submit">Registrar crédito</button>
+            </div>
+          </form>
+        </section>
+      )}
 
       {ehAgente && emAnalise && !edicao && (
         <section className="cartao detalhe-analise">

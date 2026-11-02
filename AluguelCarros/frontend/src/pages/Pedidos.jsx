@@ -11,6 +11,7 @@ const FILTROS = [
   ['TODOS', 'Todos'],
   ['EM_ANALISE', 'Em análise'],
   ['APROVADO', 'Aprovados'],
+  ['CONTRATO_EXECUTADO', 'Com contrato'],
   ['REPROVADO', 'Reprovados'],
   ['CANCELADO', 'Cancelados'],
 ]

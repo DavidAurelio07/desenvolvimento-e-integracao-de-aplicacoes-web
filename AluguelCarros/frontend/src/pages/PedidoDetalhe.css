@@ -78,3 +78,19 @@
 @media (max-width: 860px) {
   .detalhe-grid { grid-template-columns: 1fr; }
 }
+
+/* ----- Contrato e crédito ----- */
+.detalhe-contrato {
+  margin-top: 1.5rem;
+  border-top: 5px solid var(--verde);
+}
+.detalhe-contrato-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+.detalhe-credito h3 { margin-bottom: 0.75rem; }
+
+@media (max-width: 860px) {
+  .detalhe-contrato-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+}
