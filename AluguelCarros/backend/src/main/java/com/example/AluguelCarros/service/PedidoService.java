@@ -2,6 +2,8 @@ package com.example.AluguelCarros.service;
 
 import com.example.AluguelCarros.dto.AutomovelResponse;
 import com.example.AluguelCarros.dto.AvaliacaoRequest;
+import com.example.AluguelCarros.dto.ContratoResponse;
+import com.example.AluguelCarros.dto.CreditoResponse;
 import com.example.AluguelCarros.dto.PedidoRequest;
 import com.example.AluguelCarros.dto.PedidoResponse;
 import com.example.AluguelCarros.exception.RecursoNaoEncontradoException;
@@ -10,6 +12,8 @@ import com.example.AluguelCarros.model.Agente;
 import com.example.AluguelCarros.model.Automovel;
 import com.example.AluguelCarros.model.Avaliacao;
 import com.example.AluguelCarros.model.Cliente;
+import com.example.AluguelCarros.model.ContratoAluguel;
+import com.example.AluguelCarros.model.ContratoCredito;
 import com.example.AluguelCarros.model.ParecerFinanceiro;
 import com.example.AluguelCarros.model.PedidoAluguel;
 import com.example.AluguelCarros.model.StatusPedido;
@@ -158,8 +162,21 @@ public class PedidoService {
                 ? null
                 : avaliacoes.get(avaliacoes.size() - 1).getJustificativa();
 
+        ContratoResponse contrato = null;
+        ContratoAluguel c = p.getContrato();
+        if (c != null) {
+            ContratoCredito cc = c.getContratoCredito();
+            CreditoResponse credito = cc == null
+                    ? null
+                    : new CreditoResponse(cc.getId(), cc.getValorFinanciado(), cc.getTaxaJuros(),
+                            cc.getPrazoMeses(), cc.getBanco().getNome());
+            contrato = new ContratoResponse(c.getId(), c.getTipo().name(), c.getDataAssinatura(),
+                    c.getValorMensal(), c.getAgente().getNome(), a.getProprietario().getNome(),
+                    credito);
+        }
+
         return new PedidoResponse(p.getId(), p.getStatus().name(), p.getDataPedido(),
                 p.getDataInicio(), p.getDataFim(), automovel, p.getCliente().getNome(),
-                justificativa);
+                justificativa, contrato);
     }
 }

@@ -5,7 +5,9 @@ import com.example.AluguelCarros.dto.LoginResponse;
 import com.example.AluguelCarros.dto.UsuarioResponse;
 import com.example.AluguelCarros.exception.CredenciaisInvalidasException;
 import com.example.AluguelCarros.model.Agente;
+import com.example.AluguelCarros.model.Banco;
 import com.example.AluguelCarros.model.Cliente;
+import com.example.AluguelCarros.model.Empresa;
 import com.example.AluguelCarros.model.Usuario;
 import com.example.AluguelCarros.repository.UsuarioRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,8 +42,10 @@ public class AuthService {
 
     private UsuarioResponse converter(Usuario usuario) {
         return switch (usuario) {
-            case Cliente c -> new UsuarioResponse(c.getId(), c.getNome(), "CLIENTE");
-            case Agente a -> new UsuarioResponse(a.getId(), a.getNome(), "AGENTE");
+            case Cliente c -> new UsuarioResponse(c.getId(), c.getNome(), "CLIENTE", null);
+            case Empresa e -> new UsuarioResponse(e.getId(), e.getNome(), "AGENTE", "EMPRESA");
+            case Banco b -> new UsuarioResponse(b.getId(), b.getNome(), "AGENTE", "BANCO");
+            case Agente a -> new UsuarioResponse(a.getId(), a.getNome(), "AGENTE", null);
             default -> throw new IllegalStateException("Tipo de usuário desconhecido.");
         };
     }

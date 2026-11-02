@@ -10,5 +10,6 @@ public record PedidoResponse(
         LocalDate dataFim,
         AutomovelResponse automovel,
         String clienteNome,
-        String justificativaParecer) {
+        String justificativaParecer,
+        ContratoResponse contrato) {
 }
