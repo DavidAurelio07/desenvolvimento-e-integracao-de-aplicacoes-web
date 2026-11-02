@@ -207,11 +207,11 @@ O sistema segue a arquitetura **MVC** e é dividido em dois subsistemas, como no
 
 > Os arquivos-fonte (PlantUML) ficam em [`docs/`](./docs); as imagens exportadas ficam em `docs/img/`.
 
-|                               Diagrama de Casos de Uso                               |                                 Diagrama de Classes                                  |
-| :----------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------: |
-|  <img src="docs/img/casos-de-uso.png" alt="Diagrama de Casos de Uso" width="420px">  | <img src="docs/img/diagrama-de-classes.png" alt="Diagrama de Classes" width="420px"> |
-|                        **Diagrama de Pacotes (Visão Lógica)**                        |                               **Histórias de Usuário**                               |
-| <img src="docs/img/diagrama-de-pacotes.png" alt="Diagrama de Pacotes" width="420px"> |              [Ver histórias de usuário](./docs/historias-de-usuario.md)              |
+|                               Diagrama de Casos de Uso                               |                    Diagrama de Classes                     |
+| :----------------------------------------------------------------------------------: | :--------------------------------------------------------: |
+|  <img src="docs/img/casos-de-uso.png" alt="Diagrama de Casos de Uso" width="420px">  |  [Ver diagrama de clases](./docs/diagrama-de-classes.pdf)  |
+|                        **Diagrama de Pacotes (Visão Lógica)**                        |                  **Histórias de Usuário**                  |
+| <img src="docs/img/diagrama-de-pacotes.png" alt="Diagrama de Pacotes" width="420px"> | [Ver histórias de usuário](./docs/historias-de-usuario.md) |
 
 #### Fluxo de autenticação
 
