@@ -1,10 +1,18 @@
-export default function SearchBar() {
+export default function SearchBar({ value, onChange }) {
   return (
-    <div style={{ margin: '1rem 0' }}>
+    <div style={{ width: '100%', maxWidth: '500px' }}>
       <input 
         type="text" 
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
         placeholder="Pesquisar Pokémon por nome ou ID..." 
-        style={{ padding: '0.5rem', width: '100%', maxWidth: '400px', borderRadius: '4px', border: '1px solid #ccc' }} 
+        style={{ 
+          padding: '0.8rem', 
+          width: '100%', 
+          borderRadius: '8px', 
+          border: '1px solid #ccc',
+          fontSize: '1rem'
+        }} 
       />
     </div>
   )
