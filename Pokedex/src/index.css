@@ -1,21 +1,265 @@
 :root {
-  --primary-color: #ef5350;
-  --bg-color: #f4f5f7;
-  --card-bg: #ffffff;
-  --text-color: #2c3e50;
-  --font-family:
-    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  /* Cores Pokédex */
+  --pkmn-red: #dc2626;
+  --pkmn-dark-red: #991b1b;
+  --pkmn-blue: #3b82f6;
+  --pkmn-yellow: #facc15;
+  --pkmn-green: #22c55e;
+
+  /* Ecrã Game Boy */
+  --screen-bg: #9bbc0f;
+  --screen-dark: #0f380f;
+  --screen-light: #8bac0f;
+  --screen-border: #306230;
+
+  /* Estrutura */
+  --bg-color: #172033;
+  --device-bg: #dc2626;
+  --text-primary: #1e293b;
+  --text-light: #f8fafc;
+
+  --font-pixel: "Courier New", monospace;
+  --font-main: system-ui, sans-serif;
 }
 
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  font-family: var(--font-family);
-  background-color: var(--bg-color);
-  color: var(--text-color);
+  font-family: var(--font-main);
+  background: radial-gradient(circle at top, #334155, #111827 75%);
+  color: var(--text-primary);
   min-height: 100vh;
+  padding: 30px 16px;
+}
+
+/* Estrutura principal */
+
+#root {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 1050px;
+  min-width: 0;
+  background: linear-gradient(145deg, #ef4444, #b91c1c);
+  border: 5px solid #7f1d1d;
+  border-radius: 24px;
+  overflow: hidden;
+
+  box-shadow:
+    inset -8px -8px 18px rgba(0, 0, 0, 0.2),
+    inset 8px 8px 18px rgba(255, 255, 255, 0.15),
+    0 25px 60px rgba(0, 0, 0, 0.45);
+}
+
+/* Parte superior */
+
+.pokedex-header {
+  background: linear-gradient(180deg, #991b1b, #7f1d1d);
+  padding: 22px 30px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  border-bottom: 5px solid #450a0a;
+}
+
+.camera-lens {
+  width: 65px;
+  height: 65px;
+  flex-shrink: 0;
+
+  background: radial-gradient(circle at 30% 30%, #93c5fd, #2563eb 55%, #172554);
+
+  border-radius: 50%;
+  border: 5px solid #f8fafc;
+  box-shadow: 0 0 0 4px #475569;
+  position: relative;
+}
+
+.camera-lens::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 11px;
+  width: 16px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+}
+
+.mini-lights {
+  display: flex;
+  gap: 12px;
+}
+
+.mini-light {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+  box-shadow: inset -2px -2px 3px rgba(0, 0, 0, 0.3);
+}
+
+.light-red {
+  background: #ef4444;
+}
+
+.light-yellow {
+  background: #eab308;
+}
+
+.light-green {
+  background: #22c55e;
+}
+
+/* Área exterior do ecrã */
+
+.screen-container {
+  background: linear-gradient(145deg, #f1f5f9, #cbd5e1);
+  margin: 25px;
+  padding: 25px;
+  border-radius: 14px 14px 14px 45px;
+  border: 4px solid #94a3b8;
+  box-shadow:
+    inset 2px 2px 5px rgba(255, 255, 255, 0.8),
+    0 5px 12px rgba(0, 0, 0, 0.2);
+  min-width: 0;
+}
+
+/* Ecrã principal */
+
+.main-screen {
+  background: #f8fafc;
+  border: 5px solid #475569;
+  border-radius: 10px;
+  padding: 20px;
+  min-height: 550px;
+  height: 650px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Separação das abas */
+
+.screen-container > div:first-child {
+  flex-wrap: wrap;
+}
+
+/* Botões */
+
+.screen-container button {
+  transition: all 0.2s ease;
+}
+
+.screen-container button:hover {
+  filter: brightness(0.95);
+  transform: translateY(-2px);
+}
+
+.screen-container button:active {
+  transform: translateY(1px);
+}
+
+/* Scrollbar */
+
+.main-screen::-webkit-scrollbar {
+  width: 9px;
+}
+
+.main-screen::-webkit-scrollbar-track {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+
+.main-screen::-webkit-scrollbar-thumb {
+  background: #64748b;
+  border-radius: 10px;
+}
+
+.main-screen::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Scrollbar geral */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #64748b #e2e8f0;
+}
+
+/* Modal */
+
+body:has(.modal-overlay) {
+  overflow: hidden;
+}
+
+/* Responsividade */
+
+@media (max-width: 768px) {
+  body {
+    padding: 15px 8px;
+  }
+
+  .app-container {
+    border-radius: 18px;
+  }
+
+  .pokedex-header {
+    padding: 18px;
+    gap: 20px;
+  }
+
+  .camera-lens {
+    width: 50px;
+    height: 50px;
+  }
+
+  .screen-container {
+    margin: 12px;
+    padding: 12px;
+  }
+
+  .main-screen {
+    padding: 12px;
+    height: 600px;
+    min-height: 450px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 8px 5px;
+  }
+
+  .pokedex-header {
+    padding: 15px;
+  }
+
+  .screen-container {
+    margin: 8px;
+    padding: 8px;
+    border-radius: 10px 10px 10px 25px;
+  }
+
+  .main-screen {
+    padding: 10px;
+    height: 600px;
+  }
+
+  .mini-lights {
+    gap: 8px;
+  }
+
+  .mini-light {
+    width: 13px;
+    height: 13px;
+  }
 }
