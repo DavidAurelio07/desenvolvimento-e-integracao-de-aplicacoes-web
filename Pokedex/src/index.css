@@ -811,9 +811,11 @@ body:has(.modal-overlay) {
 
 /* ---------- Barra de rolagem sempre visível ---------- */
 
-/* Mantém a rolagem dentro da área de conteúdo, sem esconder a barra. */
+/* A área de conteúdo rola por dentro do ecrã (antes estava cortada). */
 .main-screen {
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
 }
 
 .main-screen main,

@@ -1,66 +1,106 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import "./css/Controls.css";
+import CompareBar from "./components/CompareBar";
+import ComparisonModal from "./components/ComparisonModal";
 import Header from "./components/Header";
-import PokemonList from "./components/PokemonList";
 import PokemonDetails from "./components/PokemonDetails";
+import PokemonList from "./components/PokemonList";
 import TrainersSection from "./components/TrainersSection";
-import pokedexDataRaw from "./data/pokedex-data.json";
-import trainersDataRaw from "./data/trainers-data.json";
+import useLocalStorage from "./hooks/useLocalStorage";
+import pokedexData from "./data/pokedex-data.json";
+import { getTypeNames, sortPokemon } from "./utils/pokemon";
+
+const { pokemon: allPokemon, trainers } = pokedexData;
+
+const pokemonById = new Map(allPokemon.map((p) => [p.id, p]));
+
+// Tipos que realmente aparecem nos Pokémon, na ordem em que estão no JSON.
+const usedTypes = new Set(allPokemon.flatMap(getTypeNames));
+const availableTypes = pokedexData.types
+  .map((type) => type.name)
+  .filter((name) => usedTypes.has(name));
 
 function App() {
-  const pokedexData = Array.isArray(pokedexDataRaw)
-    ? pokedexDataRaw
-    : pokedexDataRaw.pokemon ||
-      pokedexDataRaw.pokemons ||
-      pokedexDataRaw.data ||
-      [];
-
-  const [pokemon] = useState(pokedexData);
-  const [trainers] = useState(trainersDataRaw);
+  const [activeTab, setActiveTab] = useState("pokedex");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("");
+  const [sortKey, setSortKey] = useState("id");
+  const [sortDirection, setSortDirection] = useState("asc");
+  const [onlyFavorites, setOnlyFavorites] = useState(false);
   const [selectedPokemon, setSelectedPokemon] = useState(null);
+  const [compareIds, setCompareIds] = useState([]);
+  const [isComparing, setIsComparing] = useState(false);
 
-  const [activeTab, setActiveTab] = useState("pokedex");
+  // Estados que ficam salvos no navegador
+  const [favorites, setFavorites] = useLocalStorage("pokedex-favorites", []);
+  const [theme, setTheme] = useLocalStorage("pokedex-theme", "light");
 
-  const getTypeString = (t) => {
-    if (!t) return "";
-    if (typeof t === "string") return t;
-    if (typeof t === "object")
-      return t.name || t.nome || t.label || String(t.id || "");
-    return String(t);
-  };
+  // Aplica o tema no <html> (o CSS usa [data-theme="dark"])
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+  }, [theme]);
 
-  const allTypes = [
-    ...new Set(
-      pokedexData.flatMap((p) => {
-        const raw = p.types || p.tipo || (p.type ? [p.type] : []);
-        const arr = Array.isArray(raw) ? raw : [raw];
-        return arr.map(getTypeString);
-      }),
-    ),
-  ].filter(Boolean);
+  // Estado derivado: a lista exibida é calculada a partir dos filtros.
+  const visiblePokemon = useMemo(() => {
+    const term = searchTerm.trim().toLowerCase().replace(/^#/, "");
 
-  const filteredPokemon = pokemon.filter((p) => {
-    const pName = (p.name || p.nome || "").toLowerCase();
-    const pId = (p.id || p.number || p.numero || "").toString();
+    const filtered = allPokemon.filter((pokemon) => {
+      const matchesSearch =
+        term === "" ||
+        pokemon.name.toLowerCase().includes(term) ||
+        (/^\d+$/.test(term) && pokemon.id === Number(term));
 
-    const matchesSearch =
-      pName.includes(searchTerm.toLowerCase().trim()) ||
-      pId === searchTerm.trim();
+      const matchesType =
+        selectedType === "" || getTypeNames(pokemon).includes(selectedType);
 
-    const rawTypes = p.types || p.tipo || (p.type ? [p.type] : []);
-    const pTypes = (Array.isArray(rawTypes) ? rawTypes : [rawTypes]).map(
-      getTypeString,
+      const matchesFavorite = !onlyFavorites || favorites.includes(pokemon.id);
+
+      return matchesSearch && matchesType && matchesFavorite;
+    });
+
+    return sortPokemon(filtered, sortKey, sortDirection);
+  }, [searchTerm, selectedType, onlyFavorites, favorites, sortKey, sortDirection]);
+
+  const toggleFavorite = (id) =>
+    setFavorites((current) =>
+      current.includes(id)
+        ? current.filter((favoriteId) => favoriteId !== id)
+        : [...current, id],
     );
 
-    const matchesType = selectedType === "" || pTypes.includes(selectedType);
+  // Máximo de 2 na comparação: ao escolher um terceiro, o mais antigo sai.
+  const toggleCompare = (id) =>
+    setCompareIds((current) =>
+      current.includes(id)
+        ? current.filter((compareId) => compareId !== id)
+        : [...current.slice(-1), id],
+    );
 
-    return matchesSearch && matchesType;
-  });
+  const handleSortKeyChange = (key) => {
+    setSortKey(key);
+    // nome e ID começam crescentes; atributos começam do maior para o menor
+    setSortDirection(key === "id" || key === "name" ? "asc" : "desc");
+  };
+
+  const openRandomPokemon = () => {
+    const index = Math.floor(Math.random() * allPokemon.length);
+    setSelectedPokemon(allPokemon[index]);
+  };
+
+  const comparedPokemon = compareIds.map((id) => pokemonById.get(id));
+
+  const cardProps = {
+    favorites,
+    compareIds,
+    onPokemonClick: setSelectedPokemon,
+    onToggleFavorite: toggleFavorite,
+    onToggleCompare: toggleCompare,
+  };
+
+  const noFavorites = onlyFavorites && favorites.length === 0;
 
   return (
     <div className="app-container">
-      {/* Topo estilo Hardware Pokédex */}
       <div className="pokedex-header">
         <div className="camera-lens"></div>
         <div className="mini-lights">
@@ -68,64 +108,40 @@ function App() {
           <div className="mini-light light-yellow"></div>
           <div className="mini-light light-green"></div>
         </div>
+
+        <button
+          type="button"
+          className="theme-toggle"
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          aria-label={
+            theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro"
+          }
+        >
+          {theme === "dark" ? "☀️ Claro" : "🌙 Escuro"}
+        </button>
       </div>
 
-      {/* Área da Tela (Screen) */}
       <div className="screen-container">
-        {/* Controles Acima da Tela */}
-        <div
-          style={{
-            display: "flex",
-            gap: "1rem",
-            marginBottom: "1.5rem",
-            justifyContent: "center",
-          }}
-        >
+        <div className="tabs" role="tablist">
           <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === "pokedex"}
+            className={`tab-btn ${activeTab === "pokedex" ? "active" : ""}`}
             onClick={() => setActiveTab("pokedex")}
-            style={{
-              padding: "0.8rem 2rem",
-              fontSize: "1rem",
-              fontWeight: "bold",
-              fontFamily: "var(--font-pixel)",
-              textTransform: "uppercase",
-              borderRadius: "8px",
-              border:
-                activeTab === "pokedex"
-                  ? "4px solid #1e293b"
-                  : "4px solid transparent",
-              backgroundColor: activeTab === "pokedex" ? "#94a3b8" : "#cbd5e1",
-              color: "#1e293b",
-              cursor: "pointer",
-              boxShadow: "inset -2px -2px 5px rgba(0,0,0,0.2)",
-            }}
           >
             [Pokédex]
           </button>
           <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === "trainers"}
+            className={`tab-btn ${activeTab === "trainers" ? "active" : ""}`}
             onClick={() => setActiveTab("trainers")}
-            style={{
-              padding: "0.8rem 2rem",
-              fontSize: "1rem",
-              fontWeight: "bold",
-              fontFamily: "var(--font-pixel)",
-              textTransform: "uppercase",
-              borderRadius: "8px",
-              border:
-                activeTab === "trainers"
-                  ? "4px solid #1e293b"
-                  : "4px solid transparent",
-              backgroundColor: activeTab === "trainers" ? "#94a3b8" : "#cbd5e1",
-              color: "#1e293b",
-              cursor: "pointer",
-              boxShadow: "inset -2px -2px 5px rgba(0,0,0,0.2)",
-            }}
           >
             [Treinadores]
           </button>
         </div>
-
-        {/* Ecrã Principal onde os cards renderizam */}
 
         <div className="main-screen">
           {activeTab === "pokedex" ? (
@@ -133,71 +149,78 @@ function App() {
               <Header
                 searchTerm={searchTerm}
                 onSearchChange={setSearchTerm}
-                availableTypes={allTypes}
+                availableTypes={availableTypes}
                 selectedType={selectedType}
                 onTypeSelect={setSelectedType}
+                toolbarProps={{
+                  sortKey,
+                  onSortKeyChange: handleSortKeyChange,
+                  sortDirection,
+                  onToggleDirection: () =>
+                    setSortDirection((d) => (d === "asc" ? "desc" : "asc")),
+                  onlyFavorites,
+                  onToggleOnlyFavorites: () => setOnlyFavorites((v) => !v),
+                  favoritesCount: favorites.length,
+                  onRandom: openRandomPokemon,
+                  resultCount: visiblePokemon.length,
+                }}
               />
 
               <PokemonList
-                pokemonData={filteredPokemon}
-                onPokemonClick={setSelectedPokemon}
+                pokemonData={visiblePokemon}
+                emptyTitle={
+                  noFavorites
+                    ? "Nenhum favorito ainda"
+                    : "Nenhum Pokémon encontrado"
+                }
+                emptyText={
+                  noFavorites
+                    ? "Clique na estrela de um Pokémon para favoritá-lo."
+                    : "Tente alterar a pesquisa ou os filtros."
+                }
+                {...cardProps}
               />
             </>
           ) : (
             <TrainersSection
               trainersData={trainers}
-              pokedexData={pokemon}
-              onPokemonClick={setSelectedPokemon}
+              pokedexData={allPokemon}
+              {...cardProps}
             />
           )}
         </div>
 
-        {/* Detalhes de hardware embaixo da tela */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginTop: "1.5rem",
-            padding: "0 1rem",
-          }}
-        >
-          <div
-            style={{
-              width: "30px",
-              height: "30px",
-              borderRadius: "50%",
-              backgroundColor: "#dc2626",
-              border: "2px solid #7f1d1d",
-              boxShadow: "inset -2px -2px 5px rgba(0,0,0,0.3)",
-            }}
-          ></div>
-          <div style={{ display: "flex", gap: "0.5rem" }}>
-            <div
-              style={{
-                width: "40px",
-                height: "8px",
-                backgroundColor: "#475569",
-                borderRadius: "4px",
-              }}
-            ></div>
-            <div
-              style={{
-                width: "40px",
-                height: "8px",
-                backgroundColor: "#475569",
-                borderRadius: "4px",
-              }}
-            ></div>
+        <div className="device-footer" aria-hidden="true">
+          <div className="device-button"></div>
+          <div className="device-speakers">
+            <span></span>
+            <span></span>
           </div>
         </div>
       </div>
 
-      {/* Modal Sobreposto */}
+      <CompareBar
+        selected={comparedPokemon}
+        onRemove={toggleCompare}
+        onCompare={() => setIsComparing(true)}
+        onClear={() => setCompareIds([])}
+      />
+
       {selectedPokemon && (
         <PokemonDetails
+          key={selectedPokemon.id}
           pokemon={selectedPokemon}
+          isFavorite={favorites.includes(selectedPokemon.id)}
+          onToggleFavorite={toggleFavorite}
           onClose={() => setSelectedPokemon(null)}
+        />
+      )}
+
+      {isComparing && comparedPokemon.length === 2 && (
+        <ComparisonModal
+          a={comparedPokemon[0]}
+          b={comparedPokemon[1]}
+          onClose={() => setIsComparing(false)}
         />
       )}
     </div>
