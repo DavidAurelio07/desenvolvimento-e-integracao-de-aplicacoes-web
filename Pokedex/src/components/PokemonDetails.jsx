@@ -1,71 +1,82 @@
-export default function PokemonDetails({ pokemon, onClose }) {
-  if (!pokemon) return null;
+import { useEffect, useRef, useState } from "react";
+import "../css/Details.css";
+import useEscapeKey from "../hooks/useEscapeKey";
+import {
+  STATS,
+  formatId,
+  getImage,
+  getTotal,
+  getTypeNames,
+  handleImageError,
+} from "../utils/pokemon";
+import StatBar from "./StatBar";
+import TypeBadge from "./TypeBadge";
 
-  const id = pokemon.id || pokemon.number || pokemon.numero;
-  const name = pokemon.name || pokemon.nome || "Unknown";
+// Dados complementares da PokéAPI (opcional): altura, peso e habilidades.
+// Se a API estiver fora do ar, o modal continua funcionando com o JSON local.
+function useExtraInfo(pokemonId) {
+  const [extra, setExtra] = useState({ status: "loading", data: null });
 
-  const rawTypes =
-    pokemon.types || pokemon.tipo || (pokemon.type ? [pokemon.type] : []);
+  useEffect(() => {
+    const controller = new AbortController();
 
-  const types = (Array.isArray(rawTypes) ? rawTypes : [rawTypes])
-    .map((t) => {
-      if (typeof t === "string") return t;
-      if (t && typeof t === "object") return t.name || t.nome || t.label || "";
-      return String(t || "");
+    fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`, {
+      signal: controller.signal,
     })
-    .filter(Boolean);
+      .then((response) => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
+      })
+      .then((json) =>
+        setExtra({
+          status: "ok",
+          data: {
+            height: json.height / 10, // decímetros -> metros
+            weight: json.weight / 10, // hectogramas -> kg
+            abilities: json.abilities.map((item) => item.ability.name),
+          },
+        }),
+      )
+      .catch((error) => {
+        if (error.name !== "AbortError") {
+          setExtra({ status: "error", data: null });
+        }
+      });
 
-  const typeClass = (type) =>
-    `type-${type
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
-      .replace(/\s+/g, "-")}`;
+    return () => controller.abort();
+  }, [pokemonId]);
 
-  const rawStats = pokemon.stats || pokemon.atributos || {};
+  return extra;
+}
 
-  const getStat = (...keys) => {
-    for (const key of keys) {
-      const value = rawStats[key] ?? pokemon[key];
-      if (value !== undefined && value !== null && value !== "") {
-        const numericValue =
-          typeof value === "object"
-            ? Number(value.base_stat ?? value.value ?? 0)
-            : Number(value);
+export default function PokemonDetails({
+  pokemon,
+  onClose,
+  isFavorite,
+  onToggleFavorite,
+}) {
+  const closeButtonRef = useRef(null);
+  const extra = useExtraInfo(pokemon.id);
+  const types = getTypeNames(pokemon);
 
-        if (Number.isFinite(numericValue)) return numericValue;
-      }
-    }
-    return 0;
-  };
+  useEscapeKey(onClose);
 
-  const statLabels = [
-    { label: "❤️ HP", value: getStat("hp") },
-    { label: "⚔️ Attack", value: getStat("attack", "ataque") },
-    { label: "🛡️ Defense", value: getStat("defense", "defesa") },
-    {
-      label: "✨ Sp. Attack",
-      value: getStat("spAttack", "special-attack", "ataqueEspecial"),
-    },
-    {
-      label: "🛡️ Sp. Defense",
-      value: getStat("spDefense", "special-defense", "defesaEspecial"),
-    },
-    { label: "💨 Speed", value: getStat("speed", "velocidade") },
-  ];
-
-  const image =
-    pokemon.image ||
-    pokemon.imagem ||
-    pokemon.sprite ||
-    `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
-
-  const fallbackImage = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+  useEffect(() => {
+    closeButtonRef.current?.focus();
+  }, []);
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="pokemon-details" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="pokemon-details"
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Detalhes de ${pokemon.name}`}
+        onClick={(event) => event.stopPropagation()}
+      >
         <button
+          ref={closeButtonRef}
+          type="button"
           className="modal-close"
           onClick={onClose}
           aria-label="Fechar detalhes"
@@ -74,59 +85,81 @@ export default function PokemonDetails({ pokemon, onClose }) {
         </button>
 
         <div className="details-header">
-          <span className="details-number">#{String(id).padStart(3, "0")}</span>
+          <span className="details-number">{formatId(pokemon.id)}</span>
 
           <img
             className="details-image"
-            src={image}
-            alt={name}
-            onError={(e) => {
-              if (e.currentTarget.src !== fallbackImage) {
-                e.currentTarget.src = fallbackImage;
-              }
-            }}
+            src={getImage(pokemon)}
+            alt={pokemon.name}
+            onError={(event) => handleImageError(event, pokemon)}
           />
 
-          <h2 className="details-name">{name}</h2>
+          <h2 className="details-name">{pokemon.name}</h2>
 
           <div className="details-types">
-            {types.map((type, index) => (
-              <span
-                key={`${type}-${index}`}
-                className={`type-badge ${typeClass(type)}`}
-              >
-                {type}
-              </span>
-            ))}
+            {types.length > 0 ? (
+              types.map((type) => <TypeBadge key={type} type={type} />)
+            ) : (
+              <span className="type-badge">Sem tipo</span>
+            )}
           </div>
+
+          <button
+            type="button"
+            className={`tool-btn ${isFavorite ? "active" : ""}`}
+            aria-pressed={isFavorite}
+            onClick={() => onToggleFavorite(pokemon.id)}
+          >
+            {isFavorite ? "★ Favorito" : "☆ Favoritar"}
+          </button>
         </div>
 
         <section className="details-stats">
-          <h3>📊 Estatísticas Base</h3>
+          <h3>📊 Estatísticas base</h3>
 
-          {statLabels.map(({ label, value }) => (
-            <div className="stat-row" key={label}>
-              <span className="stat-name">{label}</span>
-
-              <span className="stat-value">{value}</span>
-
-              <div className="stat-bar">
-                <div
-                  className="stat-fill"
-                  style={{
-                    "--stat-value": `${Math.min(100, (value / 150) * 100)}%`,
-                  }}
-                />
-              </div>
-            </div>
+          {STATS.map(({ key, label, icon }) => (
+            <StatBar
+              key={key}
+              icon={icon}
+              label={label}
+              value={pokemon.stats[key]}
+            />
           ))}
 
           <div className="total-stats">
-            Total de atributos:{" "}
-            <strong>
-              {statLabels.reduce((sum, stat) => sum + stat.value, 0)}
-            </strong>
+            Total de atributos: <strong>{getTotal(pokemon)}</strong>
           </div>
+        </section>
+
+        <section className="details-extra">
+          <h3>🌐 Informações extras (PokéAPI)</h3>
+
+          {extra.status === "loading" && (
+            <p className="extra-message">Carregando...</p>
+          )}
+
+          {extra.status === "error" && (
+            <p className="extra-message">
+              Não foi possível carregar as informações da PokéAPI.
+            </p>
+          )}
+
+          {extra.status === "ok" && (
+            <dl className="extra-grid">
+              <div>
+                <dt>Altura</dt>
+                <dd>{extra.data.height} m</dd>
+              </div>
+              <div>
+                <dt>Peso</dt>
+                <dd>{extra.data.weight} kg</dd>
+              </div>
+              <div>
+                <dt>Habilidades</dt>
+                <dd className="abilities">{extra.data.abilities.join(", ")}</dd>
+              </div>
+            </dl>
+          )}
         </section>
       </div>
     </div>

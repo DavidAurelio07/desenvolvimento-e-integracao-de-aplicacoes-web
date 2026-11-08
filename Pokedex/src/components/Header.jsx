@@ -1,5 +1,6 @@
 import SearchBar from "./SearchBar";
 import Filters from "./Filters";
+import Toolbar from "./Toolbar";
 
 export default function Header({
   searchTerm,
@@ -7,6 +8,7 @@ export default function Header({
   availableTypes,
   selectedType,
   onTypeSelect,
+  toolbarProps,
 }) {
   return (
     <header className="header">
@@ -16,7 +18,7 @@ export default function Header({
           <h1>Pokédex</h1>
         </div>
 
-        <p>Explora o mundo Pokémon!</p>
+        <p>Explore o mundo Pokémon!</p>
       </div>
 
       <div className="header-controls">
@@ -27,6 +29,8 @@ export default function Header({
           selectedType={selectedType}
           onTypeSelect={onTypeSelect}
         />
+
+        <Toolbar {...toolbarProps} />
       </div>
     </header>
   );

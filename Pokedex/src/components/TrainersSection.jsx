@@ -3,24 +3,18 @@ import PokemonCard from "./PokemonCard";
 export default function TrainersSection({
   trainersData,
   pokedexData,
-  onPokemonClick,
+  ...cardProps
 }) {
   if (!trainersData || trainersData.length === 0) {
     return (
       <div className="trainers-empty">
         <h3>Nenhum treinador encontrado</h3>
-        <p>Não existem treinadores registados.</p>
+        <p>Não existem treinadores registrados.</p>
       </div>
     );
   }
 
-  const getPokemonById = (id) => {
-    return pokedexData.find((pokemon) => {
-      const pokemonId = pokemon.id || pokemon.number || pokemon.numero;
-
-      return String(pokemonId) === String(id);
-    });
-  };
+  const pokemonById = new Map(pokedexData.map((p) => [p.id, p]));
 
   return (
     <section className="trainers-section">
@@ -28,7 +22,7 @@ export default function TrainersSection({
         <div>
           <span className="section-eyebrow">POKÉMON WORLD</span>
           <h2>Treinadores</h2>
-          <p>Conhece os treinadores e as suas equipas.</p>
+          <p>Conheça os treinadores e seus times.</p>
         </div>
 
         <span className="trainer-count">{trainersData.length} TREINADORES</span>
@@ -36,8 +30,9 @@ export default function TrainersSection({
 
       <div className="trainers-list">
         {trainersData.map((trainer, index) => {
-          const trainerPokemons = (trainer.pokemonIds || [])
-            .map(getPokemonById)
+          // Set remove IDs repetidos (ex.: o Koga tem o Pokémon 48 três vezes nos dados)
+          const team = [...new Set(trainer.pokemonIds)]
+            .map((id) => pokemonById.get(id))
             .filter(Boolean);
 
           return (
@@ -45,9 +40,7 @@ export default function TrainersSection({
               <div className="trainer-card-top">
                 <div className="trainer-identity">
                   <div className="trainer-avatar">
-                    {String(trainer.name || "T")
-                      .charAt(0)
-                      .toUpperCase()}
+                    {trainer.name.charAt(0).toUpperCase()}
                   </div>
 
                   <div className="trainer-name-area">
@@ -61,10 +54,10 @@ export default function TrainersSection({
                 </div>
 
                 <div className="trainer-badge-info">
-                  <span className="badge-number">{trainer.badges || 0}</span>
+                  <span className="badge-number">{trainer.badges}</span>
 
                   <span className="badge-description">
-                    {Number(trainer.badges) === 1 ? "Insígnia" : "Insígnias"}
+                    {trainer.badges === 1 ? "Insígnia" : "Insígnias"}
                   </span>
                 </div>
               </div>
@@ -73,17 +66,17 @@ export default function TrainersSection({
 
               <div className="trainer-team">
                 <div className="team-heading">
-                  <h4>Equipa Pokémon</h4>
-                  <span>{trainerPokemons.length} Pokémon</span>
+                  <h4>Time Pokémon</h4>
+                  <span>{team.length} Pokémon</span>
                 </div>
 
-                {trainerPokemons.length > 0 ? (
+                {team.length > 0 ? (
                   <div className="pokemon-grid">
-                    {trainerPokemons.map((pokemon) => (
+                    {team.map((pokemon) => (
                       <PokemonCard
-                        key={`${pokemon.id || pokemon.number || pokemon.numero}-${trainer.id}`}
+                        key={pokemon.id}
                         pokemon={pokemon}
-                        onClick={onPokemonClick}
+                        {...cardProps}
                       />
                     ))}
                   </div>
