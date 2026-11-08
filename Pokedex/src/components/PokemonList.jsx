@@ -1,26 +1,27 @@
-import PokemonCard from './PokemonCard'
+import PokemonCard from "./PokemonCard";
 
 export default function PokemonList({ pokemonData, onPokemonClick }) {
   if (!pokemonData || pokemonData.length === 0) {
-    return <p style={{ textAlign: 'center', marginTop: '2rem' }}>Nenhum Pokémon encontrado.</p>
+    return (
+      <div className="empty-state">
+        <span>🔍</span>
+        <h2>Nenhum Pokémon encontrado</h2>
+        <p>Tenta alterar a pesquisa ou os filtros.</p>
+      </div>
+    );
   }
 
   return (
-    <div style={{ marginTop: '2rem' }}>
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', 
-        gap: '1.5rem', 
-        marginTop: '1rem' 
-      }}>
-        {pokemonData.map((pokemon) => (
-          <PokemonCard 
-            key={pokemon.id} 
-            pokemon={pokemon} 
+    <section className="pokemon-section">
+      <div className="pokemon-grid">
+        {pokemonData.map((pokemon, index) => (
+          <PokemonCard
+            key={pokemon.id || pokemon.number || pokemon.numero || index}
+            pokemon={pokemon}
             onClick={onPokemonClick}
           />
         ))}
       </div>
-    </div>
-  )
+    </section>
+  );
 }

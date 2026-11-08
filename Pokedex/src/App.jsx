@@ -5,7 +5,6 @@ import PokemonDetails from "./components/PokemonDetails";
 import TrainersSection from "./components/TrainersSection";
 import pokedexDataRaw from "./data/pokedex-data.json";
 import trainersDataRaw from "./data/trainers-data.json";
-import "./index.css";
 
 function App() {
   const pokedexData = Array.isArray(pokedexDataRaw)

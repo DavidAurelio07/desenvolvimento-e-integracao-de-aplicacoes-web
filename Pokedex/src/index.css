@@ -1,26 +1,26 @@
 :root {
-  /* Cores Pokédex */
   --pkmn-red: #dc2626;
   --pkmn-dark-red: #991b1b;
   --pkmn-blue: #3b82f6;
   --pkmn-yellow: #facc15;
   --pkmn-green: #22c55e;
 
-  /* Ecrã Game Boy */
-  --screen-bg: #9bbc0f;
-  --screen-dark: #0f380f;
-  --screen-light: #8bac0f;
-  --screen-border: #306230;
-
-  /* Estrutura */
-  --bg-color: #172033;
+  --bg-color: #111827;
   --device-bg: #dc2626;
+  --screen-frame: #cbd5e1;
+  --screen-bg: #111827;
+
   --text-primary: #1e293b;
   --text-light: #f8fafc;
+  --text-muted: #9ca3af;
 
+  --border: #374151;
   --font-pixel: "Courier New", monospace;
-  --font-main: system-ui, sans-serif;
+  --font-main:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
+
+/* ---------- Reset ---------- */
 
 * {
   margin: 0;
@@ -28,15 +28,32 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: var(--font-main);
-  background: radial-gradient(circle at top, #334155, #111827 75%);
-  color: var(--text-primary);
-  min-height: 100vh;
-  padding: 30px 16px;
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
 }
 
-/* Estrutura principal */
+body {
+  min-height: 100vh;
+  padding: 30px 16px;
+  font-family: var(--font-main);
+  color: var(--text-primary);
+  background: radial-gradient(circle at top, #334155, #111827 75%);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  max-width: 100%;
+}
 
 #root {
   width: 100%;
@@ -44,52 +61,51 @@ body {
   justify-content: center;
 }
 
+/* ---------- Corpo da Pokédex ---------- */
+
 .app-container {
   width: 100%;
   max-width: 1050px;
   min-width: 0;
+  overflow: hidden;
   background: linear-gradient(145deg, #ef4444, #b91c1c);
   border: 5px solid #7f1d1d;
   border-radius: 24px;
-  overflow: hidden;
-
   box-shadow:
     inset -8px -8px 18px rgba(0, 0, 0, 0.2),
     inset 8px 8px 18px rgba(255, 255, 255, 0.15),
     0 25px 60px rgba(0, 0, 0, 0.45);
 }
 
-/* Parte superior */
+/* ---------- Parte superior / hardware ---------- */
 
 .pokedex-header {
-  background: linear-gradient(180deg, #991b1b, #7f1d1d);
-  padding: 22px 30px;
   display: flex;
   align-items: center;
   gap: 30px;
+  padding: 22px 30px;
+  background: linear-gradient(180deg, #991b1b, #7f1d1d);
   border-bottom: 5px solid #450a0a;
 }
 
 .camera-lens {
+  position: relative;
+  flex: 0 0 65px;
   width: 65px;
   height: 65px;
-  flex-shrink: 0;
-
   background: radial-gradient(circle at 30% 30%, #93c5fd, #2563eb 55%, #172554);
-
-  border-radius: 50%;
   border: 5px solid #f8fafc;
+  border-radius: 50%;
   box-shadow: 0 0 0 4px #475569;
-  position: relative;
 }
 
 .camera-lens::after {
-  content: "";
   position: absolute;
   top: 10px;
   left: 11px;
   width: 16px;
   height: 16px;
+  content: "";
   background: rgba(255, 255, 255, 0.7);
   border-radius: 50%;
 }
@@ -102,61 +118,48 @@ body {
 .mini-light {
   width: 16px;
   height: 16px;
-  border-radius: 50%;
   border: 2px solid rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
   box-shadow: inset -2px -2px 3px rgba(0, 0, 0, 0.3);
 }
 
 .light-red {
   background: #ef4444;
 }
-
 .light-yellow {
   background: #eab308;
 }
-
 .light-green {
   background: #22c55e;
 }
 
-/* Área exterior do ecrã */
+/* ---------- Moldura do ecrã ---------- */
 
 .screen-container {
-  background: linear-gradient(145deg, #f1f5f9, #cbd5e1);
+  min-width: 0;
   margin: 25px;
   padding: 25px;
-  border-radius: 14px 14px 14px 45px;
+  background: linear-gradient(145deg, #f1f5f9, #cbd5e1);
   border: 4px solid #94a3b8;
+  border-radius: 14px 14px 14px 45px;
   box-shadow:
     inset 2px 2px 5px rgba(255, 255, 255, 0.8),
     0 5px 12px rgba(0, 0, 0, 0.2);
-  min-width: 0;
 }
 
-/* Ecrã principal */
-
-.main-screen {
-  background: #f8fafc;
-  border: 5px solid #475569;
-  border-radius: 10px;
-  padding: 20px;
-  min-height: 550px;
-  height: 650px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  position: relative;
-}
-
-/* Separação das abas */
-
+/* Os controlos das abas são criados com estilos inline no App.jsx. */
 .screen-container > div:first-child {
+  display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
-
-/* Botões */
 
 .screen-container button {
-  transition: all 0.2s ease;
+  transition:
+    filter 0.2s ease,
+    transform 0.2s ease;
 }
 
 .screen-container button:hover {
@@ -168,40 +171,514 @@ body {
   transform: translateY(1px);
 }
 
-/* Scrollbar */
+/* ---------- Ecrã de conteúdo ---------- */
 
-.main-screen::-webkit-scrollbar {
-  width: 9px;
-}
-
-.main-screen::-webkit-scrollbar-track {
-  background: #e2e8f0;
+.main-screen {
+  position: relative;
+  min-width: 0;
+  min-height: 500px;
+  height: 650px;
+  overflow: hidden;
+  padding: 20px;
+  color: var(--text-light);
+  background: #111827;
+  border: 4px solid #475569;
   border-radius: 10px;
 }
 
-.main-screen::-webkit-scrollbar-thumb {
-  background: #64748b;
-  border-radius: 10px;
+.main-screen main {
+  min-width: 0;
+  max-height: 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 10px;
 }
 
-.main-screen::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+/* ---------- Cabeçalho e pesquisa ---------- */
+
+.header {
+  margin-bottom: 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border);
 }
 
-/* Scrollbar geral */
-
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #64748b #e2e8f0;
+.header h1,
+.header-title h1 {
+  color: #f9fafb;
 }
 
-/* Modal */
+.header input,
+.header select,
+.header-controls input,
+.header-controls select {
+  max-width: 100%;
+}
+
+/* ---------- Grelha de Pokémon ---------- */
+
+.pokemon-section {
+  margin-top: 20px;
+}
+
+.pokemon-section > div,
+.pokemon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 18px;
+}
+
+/* ---------- Cartão individual ---------- */
+
+.pokemon-card {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 245px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  padding: 16px;
+  color: #f8fafc;
+  text-align: center;
+  background: linear-gradient(145deg, #263449, #1a2536);
+  border: 1px solid #394b63;
+  border-radius: 14px;
+  cursor: pointer;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.pokemon-card:hover {
+  transform: translateY(-5px);
+  background: linear-gradient(145deg, #30415a, #202c40);
+  border-color: #e05252;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.pokemon-card:focus-visible {
+  outline: 3px solid #facc15;
+  outline-offset: 3px;
+}
+
+.pokemon-card-number {
+  align-self: flex-end;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.pokemon-card .pokemon-image {
+  display: block;
+  width: 100%;
+  max-width: 150px;
+  height: 135px;
+  flex: 0 0 135px;
+  margin: 5px auto 10px;
+  object-fit: contain;
+  filter: drop-shadow(0 7px 5px rgba(0, 0, 0, 0.25));
+  transition: transform 0.3s ease;
+}
+
+.pokemon-card:hover .pokemon-image {
+  transform: scale(1.08);
+}
+
+.pokemon-card h3 {
+  width: 100%;
+  margin: 5px 0 10px;
+  color: #f8fafc;
+  font-size: 16px;
+  font-weight: 800;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.pokemon-card-types {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.type-badge {
+  padding: 5px 11px;
+  color: white;
+  background: #475569;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.pokemon-card-action {
+  width: 100%;
+  margin-top: 12px;
+  padding-top: 9px;
+  color: #f87171;
+  border-top: 1px solid #394b63;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  opacity: 0.85;
+}
+
+/* ---------- Cores dos tipos ---------- */
+
+.type-normal {
+  background: #8b929a;
+}
+.type-fire {
+  background: #e66b35;
+}
+.type-water {
+  background: #3986d7;
+}
+.type-electric {
+  background: #d5a91b;
+  color: #1f2937;
+}
+.type-grass {
+  background: #39965a;
+}
+.type-ice {
+  background: #62b8c5;
+  color: #102a36;
+}
+.type-fighting {
+  background: #b94343;
+}
+.type-poison {
+  background: #9452a8;
+}
+.type-ground {
+  background: #b58a45;
+}
+.type-flying {
+  background: #7c83c8;
+}
+.type-psychic {
+  background: #d65d91;
+}
+.type-bug {
+  background: #829b35;
+}
+.type-rock {
+  background: #9a8752;
+}
+.type-ghost {
+  background: #66558e;
+}
+.type-dragon {
+  background: #6550bd;
+}
+.type-dark {
+  background: #51464a;
+}
+.type-steel {
+  background: #718b9c;
+}
+.type-fairy {
+  background: #d58ab4;
+}
+
+/* ---------- Estado sem resultados ---------- */
+
+.empty-state,
+.trainers-empty {
+  padding: 45px 15px;
+  color: #9ca3af;
+  text-align: center;
+}
+
+.empty-state h2,
+.trainers-empty h3 {
+  margin-bottom: 8px;
+  color: #f8fafc;
+}
+
+/* ---------- Área dos treinadores ---------- */
+
+.trainers-section {
+  padding: 8px 4px 25px;
+}
+
+.trainers-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 28px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid #374151;
+}
+
+.section-eyebrow {
+  display: block;
+  margin-bottom: 9px;
+  color: #ef7777;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.trainers-heading h2 {
+  color: #f9fafb;
+  font-size: 27px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+}
+
+.trainers-heading p {
+  margin-top: 6px;
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+.trainer-count {
+  padding: 9px 12px;
+  color: #d1d5db;
+  border: 1px solid #4b5563;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  white-space: nowrap;
+}
+
+.trainers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.trainer-card {
+  padding: 22px;
+  background: linear-gradient(135deg, #253247, #1b2638);
+  border: 1px solid #37465b;
+  border-radius: 13px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+  transition:
+    border-color 0.25s,
+    transform 0.25s,
+    box-shadow 0.25s;
+}
+
+.trainer-card:hover {
+  transform: translateY(-3px);
+  border-color: #a34a4a;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+}
+
+.trainer-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.trainer-identity {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-width: 0;
+}
+
+.trainer-avatar {
+  display: flex;
+  width: 55px;
+  height: 55px;
+  flex: 0 0 55px;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background: linear-gradient(145deg, #b93838, #762626);
+  border: 1px solid #d45a5a;
+  border-radius: 12px;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.15);
+  font-size: 23px;
+  font-weight: 800;
+}
+
+.trainer-label {
+  color: #e07878;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.trainer-name-area h3 {
+  margin-top: 5px;
+  color: #f9fafb;
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.trainer-name-area p {
+  margin-top: 4px;
+  color: #9ca3af;
+  font-size: 12px;
+}
+
+.trainer-badge-info {
+  display: flex;
+  min-width: 75px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  background: rgba(250, 204, 21, 0.07);
+  border: 1px solid rgba(250, 204, 21, 0.2);
+  border-radius: 9px;
+}
+
+.badge-number {
+  color: #facc15;
+  font-size: 23px;
+  font-weight: 800;
+}
+
+.badge-description {
+  color: #c4a94d;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.trainer-divider {
+  height: 1px;
+  margin: 21px 0;
+  background: linear-gradient(90deg, #a34a4a, #374151 35%, transparent);
+}
+
+.team-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.team-heading h4 {
+  color: #e5e7eb;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.team-heading span {
+  padding: 6px 10px;
+  color: #9ca3af;
+  background: #111827;
+  border: 1px solid #374151;
+  border-radius: 5px;
+  font-size: 11px;
+}
+
+/* Sobrescreve também os estilos inline da grelha da equipa. */
+.trainer-team > div,
+.trainer-team .pokemon-grid,
+.trainer-team .pokemon-list {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)) !important;
+  gap: 12px !important;
+}
+
+.trainer-team .pokemon-card {
+  min-height: 220px;
+}
+
+.empty-team {
+  padding: 18px;
+  color: #9ca3af;
+  background: #172033;
+  border: 1px dashed #475569;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+/* ---------- Modal de detalhes ---------- */
 
 body:has(.modal-overlay) {
   overflow: hidden;
 }
 
-/* Responsividade */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(5px);
+}
+
+.modal-overlay > div {
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 30px;
+  color: #f8fafc;
+  background: #1f2937;
+  border: 1px solid #475569;
+  border-radius: 18px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.5);
+}
+
+.modal-overlay h2,
+.modal-overlay h3 {
+  color: #f8fafc;
+}
+
+.modal-overlay img {
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* ---------- Scrollbars ---------- */
+
+.main-screen main,
+.main-screen {
+  scrollbar-width: thin;
+  scrollbar-color: #64748b #1f2937;
+}
+
+.main-screen main::-webkit-scrollbar,
+.main-screen::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main-screen main::-webkit-scrollbar-track,
+.main-screen::-webkit-scrollbar-track {
+  background: #1f2937;
+  border-radius: 10px;
+}
+
+.main-screen main::-webkit-scrollbar-thumb,
+.main-screen::-webkit-scrollbar-thumb {
+  background: #64748b;
+  border-radius: 10px;
+}
+
+.main-screen main::-webkit-scrollbar-thumb:hover,
+.main-screen::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ---------- Responsividade ---------- */
+
+@media (min-width: 900px) {
+  .pokemon-card {
+    min-height: 250px;
+  }
+}
 
 @media (max-width: 768px) {
   body {
@@ -213,13 +690,14 @@ body:has(.modal-overlay) {
   }
 
   .pokedex-header {
-    padding: 18px;
     gap: 20px;
+    padding: 18px;
   }
 
   .camera-lens {
     width: 50px;
     height: 50px;
+    flex-basis: 50px;
   }
 
   .screen-container {
@@ -228,9 +706,47 @@ body:has(.modal-overlay) {
   }
 
   .main-screen {
-    padding: 12px;
     height: 600px;
     min-height: 450px;
+    padding: 12px;
+  }
+
+  .pokemon-section > div,
+  .pokemon-grid {
+    grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .trainers-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .trainer-card {
+    padding: 15px;
+  }
+
+  .trainer-name-area h3 {
+    font-size: 16px;
+  }
+
+  .trainer-avatar {
+    width: 46px;
+    height: 46px;
+    flex-basis: 46px;
+  }
+
+  .trainer-badge-info {
+    min-width: 62px;
+    padding: 8px;
+  }
+
+  .trainer-team > div,
+  .trainer-team .pokemon-grid,
+  .trainer-team .pokemon-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
 
@@ -250,8 +766,8 @@ body:has(.modal-overlay) {
   }
 
   .main-screen {
-    padding: 10px;
     height: 600px;
+    padding: 10px;
   }
 
   .mini-lights {
@@ -261,5 +777,98 @@ body:has(.modal-overlay) {
   .mini-light {
     width: 13px;
     height: 13px;
+  }
+
+  .pokemon-section > div,
+  .pokemon-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  .pokemon-card {
+    min-height: 215px;
+    padding: 10px;
+  }
+
+  .pokemon-card .pokemon-image {
+    max-width: 120px;
+    height: 115px;
+    flex-basis: 115px;
+  }
+
+  .pokemon-card h3 {
+    font-size: 14px;
+  }
+
+  .trainer-card-top {
+    align-items: flex-start;
+  }
+
+  .modal-overlay > div {
+    padding: 22px 16px;
+  }
+}
+
+/* ---------- Barra de rolagem sempre visível ---------- */
+
+/* Mantém a rolagem dentro da área de conteúdo, sem esconder a barra. */
+.main-screen {
+  overflow: hidden;
+}
+
+.main-screen main,
+.main-screen main > div {
+  min-height: 0;
+  scrollbar-width: auto;
+  scrollbar-color: #94a3b8 #1f2937;
+}
+
+/* Firefox */
+.main-screen main {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scrollbar-gutter: stable;
+}
+
+/* Chrome, Edge e Safari */
+.main-screen main::-webkit-scrollbar,
+.main-screen main > div::-webkit-scrollbar {
+  width: 12px;
+  display: block;
+}
+
+.main-screen main::-webkit-scrollbar-track,
+.main-screen main > div::-webkit-scrollbar-track {
+  background: #1f2937;
+  border-left: 1px solid #374151;
+  border-radius: 8px;
+}
+
+.main-screen main::-webkit-scrollbar-thumb,
+.main-screen main > div::-webkit-scrollbar-thumb {
+  min-height: 35px;
+  background: #94a3b8;
+  border: 3px solid #1f2937;
+  border-radius: 8px;
+}
+
+.main-screen main::-webkit-scrollbar-thumb:hover,
+.main-screen main > div::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}
+
+/* A aba Treinadores tem uma div interna com rolagem própria. */
+.main-screen main > div {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scrollbar-width: auto;
+  scrollbar-color: #94a3b8 #1f2937;
+}
+
+/* Em ecrãs pequenos, a barra continua utilizável. */
+@media (max-width: 650px) {
+  .main-screen main::-webkit-scrollbar,
+  .main-screen main > div::-webkit-scrollbar {
+    width: 10px;
   }
 }

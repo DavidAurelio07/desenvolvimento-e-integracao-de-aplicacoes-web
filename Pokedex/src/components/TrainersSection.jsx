@@ -1,4 +1,3 @@
-import React from "react";
 import PokemonCard from "./PokemonCard";
 
 export default function TrainersSection({
@@ -8,122 +7,96 @@ export default function TrainersSection({
 }) {
   if (!trainersData || trainersData.length === 0) {
     return (
-      <p style={{ textAlign: "center", marginTop: "2rem" }}>
-        Nenhum treinador encontrado.
-      </p>
+      <div className="trainers-empty">
+        <h3>Nenhum treinador encontrado</h3>
+        <p>Não existem treinadores registados.</p>
+      </div>
     );
   }
 
-  // Helper para buscar os dados completos do Pokemon pelo ID
   const getPokemonById = (id) => {
-    return pokedexData.find((p) => {
-      const pId = p.id || p.number || p.numero;
-      return String(pId) === String(id);
+    return pokedexData.find((pokemon) => {
+      const pokemonId = pokemon.id || pokemon.number || pokemon.numero;
+
+      return String(pokemonId) === String(id);
     });
   };
 
   return (
-    <div
-      style={{
-        marginTop: "3rem",
-        borderTop: "2px solid #e2e8f0",
-        paddingTop: "2rem",
-      }}
-    >
-      <h2
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "0.5rem",
-          color: "#2d3748",
-          marginBottom: "2rem",
-        }}
-      >
-        Área dos Treinadores
-      </h2>
+    <section className="trainers-section">
+      <div className="trainers-heading">
+        <div>
+          <span className="section-eyebrow">POKÉMON WORLD</span>
+          <h2>Treinadores</h2>
+          <p>Conhece os treinadores e as suas equipas.</p>
+        </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "3rem" }}>
-        {trainersData.map((trainer) => {
-          // Mapeia os IDs dos pokemons do treinador para os objetos reais
+        <span className="trainer-count">{trainersData.length} TREINADORES</span>
+      </div>
+
+      <div className="trainers-list">
+        {trainersData.map((trainer, index) => {
           const trainerPokemons = (trainer.pokemonIds || [])
             .map(getPokemonById)
             .filter(Boolean);
 
           return (
-            <div
-              key={trainer.id}
-              style={{
-                backgroundColor: "#f8fafc",
-                borderRadius: "16px",
-                padding: "1.5rem",
-                boxShadow: "0 2px 10px rgba(0,0,0,0.02)",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginBottom: "1.5rem",
-                  borderBottom: "1px solid #e2e8f0",
-                  paddingBottom: "1rem",
-                }}
-              >
-                <h3 style={{ fontSize: "1.5rem", color: "#1e293b", margin: 0 }}>
-                  {trainer.name}
-                </h3>
-                <div
-                  style={{
-                    backgroundColor: "#fef3c7",
-                    color: "#b45309",
-                    padding: "0.5rem 1rem",
-                    borderRadius: "20px",
-                    fontWeight: "bold",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.4rem",
-                  }}
-                >
-                  <span>🏅</span> {trainer.badges}{" "}
-                  {trainer.badges === 1 ? "Insígnia" : "Insígnias"}
+            <article className="trainer-card" key={trainer.id}>
+              <div className="trainer-card-top">
+                <div className="trainer-identity">
+                  <div className="trainer-avatar">
+                    {String(trainer.name || "T")
+                      .charAt(0)
+                      .toUpperCase()}
+                  </div>
+
+                  <div className="trainer-name-area">
+                    <span className="trainer-label">
+                      TREINADOR {String(index + 1).padStart(2, "0")}
+                    </span>
+
+                    <h3>{trainer.name}</h3>
+                    <p>Treinador Pokémon</p>
+                  </div>
+                </div>
+
+                <div className="trainer-badge-info">
+                  <span className="badge-number">{trainer.badges || 0}</span>
+
+                  <span className="badge-description">
+                    {Number(trainer.badges) === 1 ? "Insígnia" : "Insígnias"}
+                  </span>
                 </div>
               </div>
 
-              {trainerPokemons.length > 0 ? (
-                <div>
-                  <h4 style={{ color: "#64748b", marginBottom: "1rem" }}>
-                    Pokémon na Equipe:
-                  </h4>
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns:
-                        "repeat(auto-fill, minmax(200px, 1fr))",
-                      gap: "1rem",
-                    }}
-                  >
+              <div className="trainer-divider" />
+
+              <div className="trainer-team">
+                <div className="team-heading">
+                  <h4>Equipa Pokémon</h4>
+                  <span>{trainerPokemons.length} Pokémon</span>
+                </div>
+
+                {trainerPokemons.length > 0 ? (
+                  <div className="pokemon-grid">
                     {trainerPokemons.map((pokemon) => (
                       <PokemonCard
-                        key={
-                          (pokemon.id || pokemon.number || pokemon.numero) +
-                          "-" +
-                          trainer.id
-                        }
+                        key={`${pokemon.id || pokemon.number || pokemon.numero}-${trainer.id}`}
                         pokemon={pokemon}
                         onClick={onPokemonClick}
                       />
                     ))}
                   </div>
-                </div>
-              ) : (
-                <p style={{ color: "#94a3b8" }}>
-                  Este treinador ainda não tem Pokémon registrados.
-                </p>
-              )}
-            </div>
+                ) : (
+                  <p className="empty-team">
+                    Este treinador ainda não possui Pokémon.
+                  </p>
+                )}
+              </div>
+            </article>
           );
         })}
       </div>
-    </div>
+    </section>
   );
 }

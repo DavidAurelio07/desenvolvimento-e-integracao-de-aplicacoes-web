@@ -9,29 +9,25 @@ export default function Header({
   onTypeSelect,
 }) {
   return (
-    <header
-      style={{
-        marginBottom: "2rem",
-        paddingBottom: "1rem",
-        borderBottom: "1px solid #eee",
-      }}
-    >
-      <h1
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "0.5rem",
-          marginBottom: "1rem",
-        }}
-      >
-        Pokédex
-      </h1>
-      <SearchBar value={searchTerm} onChange={onSearchChange} />
-      <Filters
-        types={availableTypes}
-        selectedType={selectedType}
-        onTypeSelect={onTypeSelect}
-      />
+    <header className="header">
+      <div className="header-title">
+        <div>
+          <span className="header-icon">⚡</span>
+          <h1>Pokédex</h1>
+        </div>
+
+        <p>Explora o mundo Pokémon!</p>
+      </div>
+
+      <div className="header-controls">
+        <SearchBar value={searchTerm} onChange={onSearchChange} />
+
+        <Filters
+          types={availableTypes}
+          selectedType={selectedType}
+          onTypeSelect={onTypeSelect}
+        />
+      </div>
     </header>
   );
 }
