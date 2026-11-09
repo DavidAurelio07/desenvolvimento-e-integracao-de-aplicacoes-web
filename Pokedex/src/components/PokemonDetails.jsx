@@ -66,22 +66,18 @@ export default function PokemonDetails({
   }, []);
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div
+    <article
         className="pokemon-details"
-        role="dialog"
-        aria-modal="true"
         aria-label={`Detalhes de ${pokemon.name}`}
-        onClick={(event) => event.stopPropagation()}
       >
         <button
           ref={closeButtonRef}
           type="button"
-          className="modal-close"
+          className="tool-btn details-back"
           onClick={onClose}
-          aria-label="Fechar detalhes"
+          aria-label="Voltar à lista de Pokémon"
         >
-          ✕
+          ← Voltar
         </button>
 
         <div className="details-header">
@@ -161,7 +157,6 @@ export default function PokemonDetails({
             </dl>
           )}
         </section>
-      </div>
-    </div>
+    </article>
   );
 }

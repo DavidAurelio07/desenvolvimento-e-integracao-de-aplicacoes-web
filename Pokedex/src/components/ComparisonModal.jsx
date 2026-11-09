@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import "../css/Details.css";
 import useEscapeKey from "../hooks/useEscapeKey";
 import {
@@ -26,7 +27,9 @@ function CompareSide({ value, side, isWinner }) {
 }
 
 export default function ComparisonModal({ a, b, onClose }) {
+  const backRef = useRef(null);
   useEscapeKey(onClose);
+  useEffect(() => { backRef.current?.focus({ preventScroll: true }); }, []);
 
   const winsA = STATS.filter(({ key }) => a.stats[key] > b.stats[key]).length;
   const winsB = STATS.filter(({ key }) => b.stats[key] > a.stats[key]).length;
@@ -41,21 +44,18 @@ export default function ComparisonModal({ a, b, onClose }) {
   const totalB = getTotal(b);
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div
+    <article
         className="compare-modal"
-        role="dialog"
-        aria-modal="true"
         aria-label={`Comparação entre ${a.name} e ${b.name}`}
-        onClick={(event) => event.stopPropagation()}
       >
         <button
           type="button"
-          className="modal-close"
+          ref={backRef}
+          className="tool-btn details-back"
           onClick={onClose}
-          aria-label="Fechar comparação"
+          aria-label="Voltar à lista de Pokémon"
         >
-          ✕
+          ← Voltar
         </button>
 
         <div className="compare-heads">
@@ -109,7 +109,6 @@ export default function ComparisonModal({ a, b, onClose }) {
         </div>
 
         <p className="compare-summary">{summary}</p>
-      </div>
-    </div>
+    </article>
   );
 }

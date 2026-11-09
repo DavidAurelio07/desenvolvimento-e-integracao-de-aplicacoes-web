@@ -1,4 +1,27 @@
 /* ===== Modais (detalhes e comparação) ===== */
+.screen-content .pokemon-details,
+.screen-content .compare-modal {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 3px;
+  color: var(--text-primary);
+}
+
+@container (max-width: 400px) {
+  .compare-row {
+    grid-template-columns: minmax(0, 1fr) 78px minmax(0, 1fr);
+    gap: 5px;
+  }
+  .compare-label { font-size: 0.68rem; }
+  .compare-side { gap: 4px; }
+  .compare-value { min-width: 24px; }
+}
+
+.details-back {
+  margin-bottom: 16px;
+}
+
 .modal-overlay > .pokemon-details,
 .modal-overlay > .compare-modal {
   position: relative;

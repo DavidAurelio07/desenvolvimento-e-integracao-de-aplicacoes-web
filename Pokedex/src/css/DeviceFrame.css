@@ -1,0 +1,289 @@
+/* A arte decorativa não cria rolagem na página; o conteúdo rola na tela. */
+html:has(.pokedex-device),
+body:has(.pokedex-device) {
+    overflow: hidden;
+}
+
+/* Moldura do Figma ampliada e recortada em torno da tela principal. */
+.pokedex-device.app-container {
+    padding-top: 54px;
+    max-width: 1240px;
+    overflow: visible;
+    background: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.screen-theme-control {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 12px;
+}
+
+.screen-theme-control .theme-toggle {
+    margin-left: 0;
+    color: var(--text-primary);
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+}
+
+.device-frame {
+    --screen-left: 17.5%;
+    --screen-width: 65%;
+    --screen-top: 32px;
+    --screen-height: calc(100% - 104px);
+    --screen-block-inset: 104px;
+    --screen-center-offset: -20px;
+    position: relative;
+    width: 100%;
+    height: clamp(560px, calc(100dvh - 130px), 1000px);
+    max-height: calc(100dvh - 100px);
+    overflow: visible;
+    border-radius: 24px;
+    container-type: size;
+}
+
+.device-artwork {
+    position: absolute;
+    /* Escala uniforme: a abertura cobre a tela sem deformar a moldura. */
+    left: 50%;
+    top: calc(50% + var(--screen-center-offset));
+    width: max(
+        calc(var(--screen-width) / 0.728),
+        calc((100cqh - var(--screen-block-inset)) * 2.65959)
+    );
+    aspect-ratio: 1033 / 1085;
+    transform: translate(-47.7%, -73.3%);
+    overflow: visible;
+    pointer-events: none;
+}
+
+.device-artwork img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: contain;
+}
+
+/* Luzes nas coordenadas da arte: escalam junto com a moldura. */
+.device-lights {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+.device-light {
+    position: absolute;
+    animation: device-glow 3s ease-in-out infinite alternate;
+}
+.device-light-green {
+    left: 1.2%;
+    width: 3.4%;
+    height: 2.05%;
+    background: rgba(100, 255, 130, 0.35);
+    box-shadow: 0 0 8px #4dff70, 0 0 22px rgba(0, 255, 60, 0.8),
+        0 0 42px rgba(0, 255, 60, 0.4);
+}
+.light-upper { top: 57.25%; }
+.light-lower { top: 61%; animation-delay: -1.5s; }
+.device-light-blue {
+    left: 3.35%;
+    top: 84.5%;
+    width: 10.7%;
+    height: 10.2%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, rgba(210, 245, 255, 0.6), rgba(70, 170, 255, 0.1) 65%);
+    box-shadow: inset 0 0 14px rgba(135, 225, 255, 0.6),
+        0 0 18px rgba(60, 180, 255, 0.9), 0 0 50px rgba(30, 136, 229, 0.55);
+    animation-delay: -0.75s;
+}
+@keyframes device-glow {
+    from { opacity: 0.65; }
+    to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .device-light { animation: none; }
+}
+
+/* Área útil da tela, dentro da moldura cinza da imagem. */
+.device-main-screen.main-screen {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    margin: 0;
+    transform: none;
+    box-sizing: border-box;
+    top: var(--visible-top);
+    left: var(--visible-left);
+    width: var(--visible-width);
+    height: var(--visible-height);
+    min-height: 0;
+    padding: clamp(10px, 1.5vw, 20px);
+    border: 0;
+    border-radius: var(--radius-tl, 32px) var(--radius-tr, 32px)
+        var(--radius-br, 32px) var(--radius-bl, 32px);
+    overflow: hidden;
+    overscroll-behavior: contain;
+    container-type: inline-size;
+}
+
+.screen-content {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: var(--scroll-thumb) var(--screen-bg);
+    overscroll-behavior: contain;
+    padding: 3px;
+    border-radius: 10px;
+}
+
+.device-main-screen > .compare-bar {
+    position: static;
+    flex-shrink: 0;
+    width: 100%;
+    max-width: 100%;
+    transform: none;
+    margin-top: 10px;
+    padding: 8px;
+    box-shadow: none;
+}
+
+.screen-content::-webkit-scrollbar {
+    width: 8px;
+}
+.screen-content::-webkit-scrollbar-track {
+    background: var(--screen-bg);
+}
+.screen-content::-webkit-scrollbar-thumb {
+    background: var(--scroll-thumb);
+    border: 2px solid var(--screen-bg);
+    border-radius: 8px;
+}
+.screen-content::-webkit-scrollbar-thumb:hover {
+    background: var(--scroll-thumb-hover);
+}
+
+/* Os controles usam as mesmas coordenadas dos botões brancos no SVG. */
+.device-tabs {
+    position: absolute;
+    top: 91.65%;
+    left: 38.57%;
+    width: 18.45%;
+    display: flex;
+    justify-content: space-between;
+    height: 3.1%;
+    pointer-events: auto;
+    background: transparent;
+    border-radius: 12px;
+}
+
+.device-tabs .tab-btn {
+    width: 38.7%;
+    min-width: 0;
+    padding: 0;
+    color: #334155;
+    background: transparent;
+    border: 0;
+    border-radius: 10px;
+    box-shadow: none;
+    font-size: clamp(9px, 0.8vw, 12px);
+    letter-spacing: 0.04em;
+}
+
+.device-tabs .tab-btn.active {
+    color: #991b1b;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.device-tabs .tab-btn:last-child {
+    width: 38.1%;
+}
+
+.device-tabs .tab-btn:hover {
+    background: rgba(15, 23, 42, 0.1);
+}
+
+.device-tabs .tab-short-label {
+    display: none;
+}
+
+.device-tabs .tab-full-label {
+    display: inline;
+}
+
+@container (max-width: 540px) {
+    .header-title h1 {
+        font-size: 1.4rem;
+    }
+    .header-title p {
+        font-size: 0.8rem;
+    }
+    .filter-list {
+        gap: 5px;
+    }
+    .filter-btn {
+        padding: 5px 9px;
+        font-size: 0.75rem;
+    }
+    .toolbar {
+        gap: 6px;
+    }
+    .toolbar label {
+        width: 100%;
+        font-size: 0.8rem;
+    }
+    .toolbar select {
+        flex: 1;
+        min-width: 0;
+    }
+    .tool-btn {
+        padding: 6px 8px;
+        font-size: 0.75rem;
+    }
+    .result-count {
+        width: 100%;
+        margin-left: 0;
+    }
+    .pokemon-grid {
+        grid-template-columns: repeat(auto-fill, minmax(min(140px, 100%), 1fr));
+    }
+    .trainers-heading {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .trainer-card {
+        padding: 12px;
+    }
+    .trainer-card-top {
+        flex-wrap: wrap;
+    }
+    .trainer-identity {
+        flex-wrap: wrap;
+    }
+    .trainer-team .pokemon-grid {
+        grid-template-columns: repeat(
+            auto-fill,
+            minmax(min(130px, 100%), 1fr)
+        ) !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .device-frame {
+        --screen-left: 4%;
+        --screen-width: 92%;
+        --screen-top: 20px;
+        --screen-height: calc(100% - 84px);
+        --screen-block-inset: 84px;
+        --screen-center-offset: -22px;
+        border-radius: 16px;
+    }
+}
