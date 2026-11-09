@@ -32,7 +32,7 @@ export const getTotal = (pokemon) =>
 
 // Barra vermelha (fraco) -> verde (forte)
 export const statColor = (value) =>
-  `hsl(${Math.round((Math.min(value, MAX_STAT) / MAX_STAT) * 120)}, 70%, 48%)`;
+  `hsl(${Math.round((Math.min(value, MAX_STAT) / MAX_STAT) * 120)}, 70%, var(--stat-lightness))`;
 
 export const statWidth = (value) =>
   `${Math.min(100, (value / MAX_STAT) * 100)}%`;

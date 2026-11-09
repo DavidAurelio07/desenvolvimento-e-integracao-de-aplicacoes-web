@@ -16,16 +16,17 @@
   height: 36px;
   display: grid;
   place-items: center;
-  color: #f8fafc;
-  background: #374151;
-  border: 1px solid #4b5563;
+  color: var(--text-primary);
+  background: var(--surface-subtle);
+  border: 1px solid var(--border-strong);
   border-radius: 50%;
   font-size: 16px;
   line-height: 1;
 }
 
 .modal-close:hover {
-  background: #ef4444;
+  color: var(--on-accent);
+  background: var(--accent-solid);
 }
 
 .details-header {
@@ -38,7 +39,7 @@
 
 .details-number {
   align-self: flex-start;
-  color: #94a3b8;
+  color: var(--text-muted);
   font-weight: 800;
 }
 
@@ -90,7 +91,7 @@
 .stat-bar {
   height: 10px;
   overflow: hidden;
-  background: #374151;
+  background: var(--surface-subtle);
   border-radius: 999px;
 }
 
@@ -109,8 +110,8 @@
 .total-stats {
   margin-top: 14px;
   padding-top: 12px;
-  border-top: 1px solid #374151;
-  color: #cbd5e1;
+  border-top: 1px solid var(--border);
+  color: var(--text-secondary);
 }
 
 /* ===== Informações da PokéAPI ===== */
@@ -127,12 +128,12 @@
 
 .extra-grid > div {
   padding: 10px;
-  background: rgba(0, 0, 0, 0.22);
+  background: var(--surface-subtle);
   border-radius: 10px;
 }
 
 .extra-grid dt {
-  color: #94a3b8;
+  color: var(--text-muted);
   font-size: 0.75rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -182,7 +183,7 @@
 }
 
 .compare-label {
-  color: #cbd5e1;
+  color: var(--text-secondary);
   font-size: 0.78rem;
   font-weight: 700;
   text-align: center;
@@ -208,19 +209,19 @@
 
 .compare-value {
   min-width: 30px;
-  color: #94a3b8;
+  color: var(--text-muted);
   font-weight: 800;
   text-align: center;
 }
 
 .compare-side.win .compare-value {
-  color: #facc15;
+  color: var(--highlight);
 }
 
 .compare-total {
   margin-top: 14px;
   padding-top: 12px;
-  border-top: 1px solid #374151;
+  border-top: 1px solid var(--border);
 }
 
 .compare-total .compare-side {
@@ -233,7 +234,7 @@
 
 .compare-summary {
   margin-top: 16px;
-  color: #e2e8f0;
+  color: var(--text-secondary);
   font-weight: 700;
   text-align: center;
   text-transform: none;

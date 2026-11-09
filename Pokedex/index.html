@@ -4,6 +4,17 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // Aplica a preferência antes de carregar os estilos e montar o React.
+      try {
+        document.documentElement.dataset.theme =
+          JSON.parse(localStorage.getItem("pokedex-theme")) === "dark"
+            ? "dark"
+            : "light";
+      } catch {
+        document.documentElement.dataset.theme = "light";
+      }
+    </script>
     <title>Pokédex</title>
   </head>
   <body>

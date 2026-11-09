@@ -95,3 +95,4 @@ Componentes funcionais, props, `useState`, `useEffect` (Esc, PokéAPI, tema), `u
 ## Desenvolvido por:
 
 - David Aurélio Pedosa — [GitHub](https://github.com/DavidAurelio07)
+- Davi Emanuel Moreira Sollar — [GitHub](https://github.com/HyperSonic3608)

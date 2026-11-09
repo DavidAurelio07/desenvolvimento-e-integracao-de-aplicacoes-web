@@ -1,0 +1,101 @@
+/* Cores semânticas compartilhadas por toda a interface. */
+:root {
+    color-scheme: light;
+    --bg-color: #e2e8f0;
+    --page-background: radial-gradient(circle at top, #f8fafc, #cbd5e1 75%);
+    --device-background: linear-gradient(145deg, #ef4444, #b91c1c);
+    --device-border: #7f1d1d;
+    --device-header: linear-gradient(180deg, #991b1b, #7f1d1d);
+    --device-header-border: #450a0a;
+    --frame-background: linear-gradient(145deg, #f1f5f9, #cbd5e1);
+    --frame-border: #94a3b8;
+    --screen-bg: #f8fafc;
+    --surface: #ffffff;
+    --surface-subtle: #e2e8f0;
+    --card-background: linear-gradient(145deg, #ffffff, #f1f5f9);
+    --card-hover: linear-gradient(145deg, #f8fafc, #e2e8f0);
+    --text-primary: #1e293b;
+    --text-secondary: #334155;
+    --text-muted: #526176;
+    --border: #cbd5e1;
+    --border-strong: #94a3b8;
+    --accent: #b91c1c;
+    --accent-solid: #b91c1c;
+    --on-accent: #ffffff;
+    --highlight: #926600;
+    --highlight-bg: #fef3c7;
+    --highlight-border: #d6ac39;
+    --selection-bg: #facc15;
+    --on-selection: #1e293b;
+    --focus-ring: #2563eb;
+    --tab-bg: #cbd5e1;
+    --tab-active-bg: #94a3b8;
+    --tab-active-border: #1e293b;
+    --scroll-track: #e2e8f0;
+    --scroll-thumb: #64748b;
+    --scroll-thumb-hover: #475569;
+    --overlay: rgba(15, 23, 42, 0.55);
+    --panel-shadow: 0 8px 20px rgba(15, 23, 42, 0.1);
+    --hover-shadow: 0 12px 25px rgba(15, 23, 42, 0.18);
+    --floating-shadow: 0 25px 70px rgba(15, 23, 42, 0.25);
+    --frame-highlight: rgba(255, 255, 255, 0.8);
+    --stat-lightness: 36%;
+}
+
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg-color: #020617;
+    --page-background: radial-gradient(circle at top, #0f172a, #020617 75%);
+    --device-background: linear-gradient(145deg, #7f1d1d, #450a0a);
+    --device-border: #2b0707;
+    --device-header: linear-gradient(180deg, #450a0a, #2b0707);
+    --device-header-border: #1a0404;
+    --frame-background: linear-gradient(145deg, #1e293b, #0f172a);
+    --frame-border: #334155;
+    --screen-bg: #0b1220;
+    --surface: #1f2937;
+    --surface-subtle: #111827;
+    --card-background: linear-gradient(145deg, #263449, #1a2536);
+    --card-hover: linear-gradient(145deg, #30415a, #202c40);
+    --text-primary: #f8fafc;
+    --text-secondary: #e2e8f0;
+    --text-muted: #a8b5c7;
+    --border: #394b63;
+    --border-strong: #64748b;
+    --accent: #fca5a5;
+    --accent-solid: #b91c1c;
+    --highlight: #facc15;
+    --highlight-bg: rgba(250, 204, 21, 0.07);
+    --highlight-border: rgba(250, 204, 21, 0.3);
+    --focus-ring: #facc15;
+    --tab-bg: #334155;
+    --tab-active-bg: #475569;
+    --tab-active-border: #e2e8f0;
+    --scroll-track: #1f2937;
+    --scroll-thumb: #94a3b8;
+    --scroll-thumb-hover: #cbd5e1;
+    --overlay: rgba(0, 0, 0, 0.78);
+    --panel-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+    --hover-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+    --floating-shadow: 0 25px 70px rgba(0, 0, 0, 0.5);
+    --frame-highlight: rgba(255, 255, 255, 0.08);
+    --stat-lightness: 48%;
+}
+
+input::placeholder {
+    color: var(--text-muted);
+    opacity: 1;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+::selection {
+    color: var(--on-selection);
+    background: var(--selection-bg);
+}

@@ -33,7 +33,8 @@ function App() {
 
   // Estados que ficam salvos no navegador
   const [favorites, setFavorites] = useLocalStorage("pokedex-favorites", []);
-  const [theme, setTheme] = useLocalStorage("pokedex-theme", "light");
+  const [savedTheme, setTheme] = useLocalStorage("pokedex-theme", "light");
+  const theme = savedTheme === "dark" ? "dark" : "light";
 
   // Aplica o tema no <html> (o CSS usa [data-theme="dark"])
   useEffect(() => {

@@ -10,7 +10,7 @@
   height: 28px;
   display: grid;
   place-items: center;
-  color: #94a3b8;
+  color: var(--text-muted);
   background: transparent;
   border: none;
   border-radius: 50%;
@@ -19,11 +19,11 @@
 }
 
 .icon-btn.active {
-  color: #facc15;
+  color: var(--highlight);
 }
 
 .icon-btn:hover {
-  color: #facc15;
+  color: var(--highlight);
 }
 
 .card-stats {
@@ -36,19 +36,19 @@
 
 .card-stat {
   padding: 3px 0;
-  background: rgba(0, 0, 0, 0.22);
+  background: var(--surface-subtle);
   border-radius: 6px;
 }
 
 .card-stat dt {
-  color: #94a3b8;
+  color: var(--text-muted);
   font-size: 9px;
   font-weight: 800;
   letter-spacing: 0.5px;
 }
 
 .card-stat dd {
-  color: #f8fafc;
+  color: var(--text-primary);
   font-size: 13px;
   font-weight: 800;
 }
@@ -61,7 +61,7 @@
   gap: 6px;
   margin-top: 12px;
   padding-top: 9px;
-  border-top: 1px solid #394b63;
+  border-top: 1px solid var(--border);
 }
 
 .card-footer .pokemon-card-action {
@@ -73,9 +73,9 @@
 
 .compare-btn {
   padding: 3px 8px;
-  color: #e2e8f0;
+  color: var(--text-secondary);
   background: transparent;
-  border: 1px solid #4b5563;
+  border: 1px solid var(--border-strong);
   border-radius: 999px;
   font-size: 10px;
   font-weight: 700;
@@ -83,7 +83,7 @@
 
 .compare-btn:hover,
 .compare-btn.active {
-  color: #1e293b;
-  background: #facc15;
-  border-color: #facc15;
+  color: var(--on-selection);
+  background: var(--selection-bg);
+  border-color: var(--highlight);
 }
