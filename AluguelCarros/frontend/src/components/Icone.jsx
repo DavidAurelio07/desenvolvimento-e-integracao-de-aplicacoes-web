@@ -67,6 +67,23 @@ const ICONES = {
       <polyline points="9 12 11 14 15 10" />
     </>
   ),
+};
+
+export function LogoBaoDeRoda({ largura = 220, className = "" }) {
+  return (
+    <img
+      src="/logo-horizontal.png"
+      alt="Bão de Roda - Aluguel de Carros"
+      width={largura}
+      className={className}
+      style={{
+        width: `${largura}px`,
+        height: "auto",
+        objectFit: "contain",
+        display: "block",
+      }}
+    />
+  );
 }
 
 export default function Icone({ nome, tamanho = 24 }) {
@@ -85,5 +102,5 @@ export default function Icone({ nome, tamanho = 24 }) {
     >
       {ICONES[nome]}
     </svg>
-  )
+  );
 }
