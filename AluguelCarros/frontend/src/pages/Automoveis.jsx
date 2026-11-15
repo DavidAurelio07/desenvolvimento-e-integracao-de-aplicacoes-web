@@ -1,77 +1,120 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
 import {
   atualizarAutomovel,
   cadastrarAutomovel,
+  excluirAutomovel,
   listarAutomoveis,
-} from '../services/automovelService'
-import { mensagemDeErro } from '../services/api'
-import CartaoCarro from '../components/CartaoCarro'
-import FotoCarro from '../components/FotoCarro'
-import './Automoveis.css'
+} from "../services/automovelService";
+import { mensagemDeErro } from "../services/api";
+import CartaoCarro from "../components/CartaoCarro";
+import FotoCarro from "../components/FotoCarro";
+import "./Automoveis.css";
 
-const formInicial = { matricula: '', ano: '', marca: '', modelo: '', placa: '', imagemUrl: '' }
+const formInicial = {
+  matricula: "",
+  ano: "",
+  marca: "",
+  modelo: "",
+  placa: "",
+  imagemUrl: "",
+};
 
 export default function Automoveis() {
-  const [automoveis, setAutomoveis] = useState(null)
-  const [form, setForm] = useState(formInicial)
-  const [editandoId, setEditandoId] = useState(null)
-  const [erro, setErro] = useState('')
-  const [mensagem, setMensagem] = useState('')
-  const [salvando, setSalvando] = useState(false)
+  const [automoveis, setAutomoveis] = useState(null);
+  const [form, setForm] = useState(formInicial);
+  const [editandoId, setEditandoId] = useState(null);
+  const [erro, setErro] = useState("");
+  const [mensagem, setMensagem] = useState("");
+  const [salvando, setSalvando] = useState(false);
+  const [excluindoId, setExcluindoId] = useState(null);
 
   useEffect(() => {
     listarAutomoveis()
       .then(setAutomoveis)
-      .catch((err) => setErro(mensagemDeErro(err, 'Não foi possível carregar os automóveis.')))
-  }, [])
+      .catch((err) =>
+        setErro(
+          mensagemDeErro(err, "Não foi possível carregar os automóveis."),
+        ),
+      );
+  }, []);
 
   function atualizar(e) {
-    setForm({ ...form, [e.target.name]: e.target.value })
+    setForm({ ...form, [e.target.name]: e.target.value });
   }
 
   function iniciarEdicao(automovel) {
-    setEditandoId(automovel.id)
+    setEditandoId(automovel.id);
     setForm({
       matricula: automovel.matricula,
       ano: String(automovel.ano),
       marca: automovel.marca,
       modelo: automovel.modelo,
       placa: automovel.placa,
-      imagemUrl: automovel.imagemUrl ?? '',
-    })
-    setErro('')
-    setMensagem('')
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+      imagemUrl: automovel.imagemUrl ?? "",
+    });
+    setErro("");
+    setMensagem("");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function cancelarEdicao() {
-    setEditandoId(null)
-    setForm(formInicial)
-    setErro('')
+    setEditandoId(null);
+    setForm(formInicial);
+    setErro("");
+  }
+
+  async function excluir(automovel) {
+    const confirmado = window.confirm(
+      `Excluir o automóvel ${automovel.marca} ${automovel.modelo} (placa ${automovel.placa})? Essa ação não pode ser desfeita.`,
+    );
+    if (!confirmado) {
+      return;
+    }
+    setErro("");
+    setMensagem("");
+    setExcluindoId(automovel.id);
+    try {
+      await excluirAutomovel(automovel.id);
+      setAutomoveis(automoveis.filter((a) => a.id !== automovel.id));
+      if (editandoId === automovel.id) {
+        cancelarEdicao();
+      }
+      setMensagem("Automóvel excluído com sucesso.");
+    } catch (err) {
+      setErro(mensagemDeErro(err, "Não foi possível excluir o automóvel."));
+    } finally {
+      setExcluindoId(null);
+    }
   }
 
   async function enviar(e) {
-    e.preventDefault()
-    setErro('')
-    setMensagem('')
-    setSalvando(true)
-    const dados = { ...form, ano: Number(form.ano), imagemUrl: form.imagemUrl.trim() }
+    e.preventDefault();
+    setErro("");
+    setMensagem("");
+    setSalvando(true);
+    const dados = {
+      ...form,
+      ano: Number(form.ano),
+      imagemUrl: form.imagemUrl.trim(),
+    };
     try {
       if (editandoId) {
-        const atualizado = await atualizarAutomovel(editandoId, dados)
-        setAutomoveis(automoveis.map((a) => (a.id === editandoId ? atualizado : a)))
-        setMensagem('Automóvel atualizado com sucesso.')
+        const atualizado = await atualizarAutomovel(editandoId, dados);
+        setAutomoveis(
+          automoveis.map((a) => (a.id === editandoId ? atualizado : a)),
+        );
+        setMensagem("Automóvel atualizado com sucesso.");
       } else {
-        const novo = await cadastrarAutomovel(dados)
-        setAutomoveis([...automoveis, novo])
-        setMensagem('Automóvel cadastrado com sucesso.')
+        const novo = await cadastrarAutomovel(dados);
+        setAutomoveis([...automoveis, novo]);
+        setMensagem("Automóvel cadastrado com sucesso.");
       }
-      setEditandoId(null)
-      setForm(formInicial)
+      setEditandoId(null);
+      setForm(formInicial);
     } catch (err) {
-      setErro(mensagemDeErro(err, 'Não foi possível salvar o automóvel.'))
+      setErro(mensagemDeErro(err, "Não foi possível salvar o automóvel."));
     } finally {
-      setSalvando(false)
+      setSalvando(false);
     }
   }
 
@@ -80,36 +123,67 @@ export default function Automoveis() {
       <header className="cabecalho-pagina">
         <div>
           <h1>Automóveis</h1>
-          <p className="subtitulo">Cadastre, edite e consulte os carros disponíveis para aluguel.</p>
+          <p className="subtitulo">
+            Cadastre, edite e consulte os carros disponíveis para aluguel.
+          </p>
         </div>
-        {automoveis && <span className="auto-contador">{automoveis.length} cadastrados</span>}
+        {automoveis && (
+          <span className="auto-contador">{automoveis.length} cadastrados</span>
+        )}
       </header>
 
       <div className="auto-grid">
         <section className="cartao auto-formulario">
-          <h2>{editandoId ? 'Editar automóvel' : 'Cadastrar automóvel'}</h2>
+          <h2>{editandoId ? "Editar automóvel" : "Cadastrar automóvel"}</h2>
           <form className="form-pilha" onSubmit={enviar}>
             <label>
               Marca
-              <input name="marca" value={form.marca} onChange={atualizar} required />
+              <input
+                name="marca"
+                value={form.marca}
+                onChange={atualizar}
+                required
+              />
             </label>
             <label>
               Modelo
-              <input name="modelo" value={form.modelo} onChange={atualizar} required />
+              <input
+                name="modelo"
+                value={form.modelo}
+                onChange={atualizar}
+                required
+              />
             </label>
             <div className="campos-grid">
               <label>
                 Ano
-                <input type="number" name="ano" min="1900" value={form.ano} onChange={atualizar} required />
+                <input
+                  type="number"
+                  name="ano"
+                  min="1900"
+                  value={form.ano}
+                  onChange={atualizar}
+                  required
+                />
               </label>
               <label>
                 Placa
-                <input name="placa" value={form.placa} onChange={atualizar} required />
+                <input
+                  name="placa"
+                  value={form.placa}
+                  onChange={atualizar}
+                  required
+                />
               </label>
             </div>
             <label>
               Matrícula
-              <input name="matricula" value={form.matricula} onChange={atualizar} required />
+              <input
+                name="matricula"
+                value={form.matricula}
+                onChange={atualizar}
+                required
+              />
             </label>
 
             <label>
@@ -124,23 +198,36 @@ export default function Automoveis() {
             </label>
             <div className="auto-previa">
               <FotoCarro
-                automovel={{ marca: form.marca, modelo: form.modelo, imagemUrl: form.imagemUrl.trim() }}
+                automovel={{
+                  marca: form.marca,
+                  modelo: form.modelo,
+                  imagemUrl: form.imagemUrl.trim(),
+                }}
               />
             </div>
             <p className="auto-dica">
-              Cole o endereço de uma imagem (clique com o botão direito na foto e escolha
-              &quot;Copiar endereço da imagem&quot;). Se a prévia mostrar só a ilustração,
-              o link não é de uma imagem ou o site bloqueia o uso dela.
+              Cole o endereço de uma imagem (clique com o botão direito na foto
+              e escolha &quot;Copiar endereço da imagem&quot;). Se a prévia
+              mostrar só a ilustração, o link não é de uma imagem ou o site
+              bloqueia o uso dela.
             </p>
 
             {mensagem && <p className="sucesso">{mensagem}</p>}
             {erro && <p role="alert">{erro}</p>}
             <div className="acoes-linha">
               <button type="submit" disabled={salvando}>
-                {salvando ? 'Salvando...' : editandoId ? 'Salvar alterações' : 'Cadastrar automóvel'}
+                {salvando
+                  ? "Salvando..."
+                  : editandoId
+                    ? "Salvar alterações"
+                    : "Cadastrar automóvel"}
               </button>
               {editandoId && (
-                <button type="button" className="btn-secundario" onClick={cancelarEdicao}>
+                <button
+                  type="button"
+                  className="btn-secundario"
+                  onClick={cancelarEdicao}
+                >
                   Cancelar edição
                 </button>
               )}
@@ -156,12 +243,17 @@ export default function Automoveis() {
           ) : (
             <div className="auto-lista">
               {automoveis.map((a) => (
-                <CartaoCarro key={a.id} automovel={a} onEditar={iniciarEdicao} />
+                <CartaoCarro
+                  key={a.id}
+                  automovel={a}
+                  onEditar={iniciarEdicao}
+                  onExcluir={excluindoId ? undefined : excluir}
+                />
               ))}
             </div>
           )}
         </section>
       </div>
     </div>
-  )
+  );
 }

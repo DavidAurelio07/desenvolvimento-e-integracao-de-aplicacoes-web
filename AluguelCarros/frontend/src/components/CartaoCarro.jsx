@@ -8,6 +8,7 @@ export default function CartaoCarro({
   selecionado = false,
   onSelecionar,
   onEditar,
+  onExcluir,
 }) {
   const classes = `carro carro-cor-${automovel.id % 4}`
 
@@ -20,14 +21,27 @@ export default function CartaoCarro({
         <h3>{automovel.marca} {automovel.modelo}</h3>
         <p>{automovel.ano} · Placa {automovel.placa}</p>
         <span className="carro-matricula">Matrícula {automovel.matricula}</span>
-        {onEditar && (
-          <button
-            type="button"
-            className="btn-secundario carro-editar"
-            onClick={() => onEditar(automovel)}
-          >
-            Editar
-          </button>
+        {(onEditar || onExcluir) && (
+          <div className="carro-acoes">
+            {onEditar && (
+              <button
+                type="button"
+                className="btn-secundario carro-editar"
+                onClick={() => onEditar(automovel)}
+              >
+                Editar
+              </button>
+            )}
+            {onExcluir && (
+              <button
+                type="button"
+                className="btn-secundario carro-excluir"
+                onClick={() => onExcluir(automovel)}
+              >
+                Excluir
+              </button>
+            )}
+          </div>
         )}
       </div>
     </>

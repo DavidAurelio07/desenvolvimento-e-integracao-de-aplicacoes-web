@@ -14,3 +14,7 @@ export async function cadastrarAutomovel(automovel) {
   const { data } = await api.post('/automoveis', automovel)
   return data
 }
+
+export async function excluirAutomovel(id) {
+  await api.delete(`/automoveis/${id}`)
+}
