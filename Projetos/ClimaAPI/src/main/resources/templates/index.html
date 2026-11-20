@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clima em BH</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+  </head>
+  <body>
+    <header>
+      <h2>Clima de Belo Horizonte - Ao Vivo</h2>
+    </header>
+    <main>
+      <p class="temperatura" th:text="${'Temperatura Atual: ' + }"></p>
+    </main>
+  </body>
+</html>

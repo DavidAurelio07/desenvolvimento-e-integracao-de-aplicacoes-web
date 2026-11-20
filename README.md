@@ -1,2 +1,3 @@
-# desenvolvimento-e-integracao-de-aplicacoes-web
-Pasta para as atividades da matéria de DIAW
+# Desenvolvimento e Integração de Aplicações Web (DIAW)
+
+Repositório destinado ao armazenamento e à organização das atividades, exercícios e projetos desenvolvidos durante a disciplina de **Desenvolvimento e Integração de Aplicações Web (DIAW)**.
